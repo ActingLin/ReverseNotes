@@ -227,8 +227,9 @@ function h(e) {
     },
 })
 
-function get_data() {
-    // e = 'dictType=supplier_type'
+// 解密
+function get_data(e) {
+    // e = 'noticeType=1&middleId=18601'
     // console.log(h(e))
     a = h(e)
     b = window.zy("e762");
@@ -239,9 +240,56 @@ function get_data() {
         "epcos": epcos
     }
 }
-
 // {
 //   content: '+Ysyv4Aaym1qiR6tV9ILnc60TcbAH1Ot1szk9/1V+zU=',
 //   aesKey: 'EoH5sBtaGuYf9wkJtV6MaqjsTHoaOB/NWn1gWZI4Qooh5QNPnHkq/D+D4W7jk6WJmIzB6fHE/U1Xl/ky1nJtjtL15HSOlcYzCww4hVviQwbZjjKDvVlUqwUVtVXFbadKAsLpWriBU/bcrW+tl1GS46fJLp88Mcq7Qxq6HQDUR9k='
 // }
 // bzByY2ZRSnlFUTNYR0JhaVhLemVnRnNTYzlhbWJvS2V2OXRpNXRCMGp6ST0
+function m(data) {
+    const e = data.content;
+    const t = data.aesKey;
+    var p = "MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBALROqKeWuu+G6z6V7lesaAIC8FWWJ8qYRRy4HbbakJBH+OEWfD+0/MmMnZ28aMiV3qDy34SLfddDxvWJo/SR8iL8bjeqOEQxenu8Ogec+290w4F8IW6Ips/kZ5pnkg/TUn1GATOSV+RbB90okuykbBEbGKaNqGczJ/lI7RpfNvCpAgMBAAECgYA9RzJYaoizmRXgGlJ7Z3Odo2QMolB5sRBj90rZ9yQEdQFndh3aBOeYk/qJPhwad5zG9GP0hvfIrhczIYkgOG2i1ZvBAFBP7IZiGJz5PxS9QOFPg926sI6Mv3nBIS0+U88IyzPL/fQWNvhc3b9Y95kYp4p0Wk4zzNe9HNNUMQHdUQJBAOwA6EoVSlxlpNivoAGrMynLlnHmZ7fEpXXQINUbhpX8+I3fazoWcRaYpfLmVKa82DJXHUe8URFX3oir3kAocVUCQQDDlahWFmYmtNYqLitJdIdltTcmQtAgHlfshdYnq6Gg8jSjwh40sXF8MgZfG03+sfdmKbSG3e+7Ihb/X5P/odIFAkEAlz3Rn0BbojDlXpPWN5uOMzesFxwv1Z3o50JU+B0mt9IhO1I1dklRecijeLFRCHW3GzOmqQUu8q1cCDwUNwtz7QJBAJ3BT8coR/q+b+QT20xjVnaeBT6yM2dEskyP4x2aXUMROY5Am9aKrWuseeEqh+2ApHld+EO0LZJ2O7B96kUNw/UCQHhXTTBHc2HkyU84U2+OAB2hJtJBmj+eGl0iqNfOq3JyiIemC/bV74sASLa+NN9CJRotBh9jzmzNpwEi24Y8KHE=";
+    var n = new JSencrypt;
+    n.setPrivateKey(p);
+    var i = n.decrypt(t)
+      , r = CryptoJS.enc.Utf8.parse(i)
+      , o = CryptoJS.AES.decrypt(e, r, {
+        mode: CryptoJS.mode.ECB,
+        padding: CryptoJS.pad.Pkcs7
+    });
+    return JSON.parse(CryptoJS.enc.Utf8.stringify(o).toString())
+}
+t = {
+    "aesKey": "FKfB9U97Vc/0TdlRWUwIHjyAYYAZdli7ALbtFJi/o9FIRTUAK1mPVti0E3N80pLp+I/nXL3njjwlesOymOxGMe8VfIMz/3VJUZZ3sHOi44xLEdDgX44x8IHWpbqU2JS7oIJ1GV8yUYlW7DpkaqVaSwDhYmEYjyADFezSM/N5EBc=",
+    "content": "/xFCTNQ1euf674qgzs+Xmt9OGpSrk5KvL0j6LiIe2e2MD96zl1kKM9zt1YdPLQ09hhu25UKHlr4XtuK5LebTN+EhRYGCqGMsS1BTNUiKPRJqw0khEoqkSM1Y7dI691Vdx9CfxxIDUQBuv4hpxD7JiYjfW4A4BsNxXtGhKMywet1gWBc4nuGCsTdxlyL3IEEDeANEzI8SXxg3zgFDngb6WxX9Hixs4U3L2fLU2vqm3AaCNoqvVDh1Z3f9ZSjKr3h6S6odkRLVBKr17QT8o+vc7Xr+/JARSDFLkZgprHj7zT+v5kG6Oz1BPMnxraIWfQKBoj9ncgcwMADfQmtGELdlaeTcd2zE5cHmzUwfZrAz5UOjT8tTO/+tnkKgFiLC6Mk5Oxq4qODINXYPuJ7LdrF1R5A5oQMg63MNZAuUzBr/fXz4dZfVD26qEcs/MJyPOp/6UyRC+QukSMe5xHBbOVTNE7mJ2ZOSFQL+ZyiiMGtm0k06JKbhshS5VTROXisLId9ESNgP9L0vuJep53+G3cd/HQrpPdl5RfeQyF1eZgnzeKhjZVNiDnaAKLCsrawHoUg2lK1mu8OS6fz4VztpuqD0w17EQwFkjbdKYCTNBkJol+aMDZUgLVwie7iExXfkBqbsNmpjFqEClb4bNTC86FQ1kUrLfV9+DpxkhI5MqSXHa3VrATFUqZwk9aL9B2UjSyIjTKGmjIh1+e5+KvY0r+wBxMB8KOrGzKzjY0+KgX21diFSQBfGT8DiJRclfxVkaG+XQ9YZqQlqkmuBGC30JgzHSYkQhW8rUPpuwIkdvKemDBC4Ah+MdkZFfJdo4MW77Q7U4G1BZ9KO89AveSWf0Ets3sxYHchG3o/qhbUYjPauPl+W/pLS1XAD/C5AYXP6aNCHQdiMo2PXGQQ9O2KiuuGH/ejAvtoBcMkPKdUsT5Qf0BES+d9lmuihxebTt7MogWaGU8zutiIOHSI3BSKw6Y7AnLO9ErSl66Eww3nTl/8j3uSjgjmTK8rsLMfyY69qte7AlyHjhe4vpJP3fxlb+VoXwkWV51N8MOKTt+bCLcDr31OOjDLDPJKCV69Xv5ZMdYDo+uA5S2bhrUDkDLuXcPwpKdQn2A0IKA9k2LV81LjonIsTq3ilVfMIOZYV+vDbaXtc"
+}
+// console.log(m(t))
+// {
+//   code: 200,
+//   msg: null,
+//   data: {
+//     bulletinId: null,
+//     middleId: null,
+//     tenderCompanyName: '深圳市南山区人民医院',
+//     tenderProjectName: '床边血液净化机维修服务（第二次）',
+//     tenderProjectCode: 'ZBFW20260203003',
+//     bidSectionName: null,
+//     bidSectionCode: '',
+//     bulletinName: '床边血液净化机维修服务（第二次）采购公告',
+//     bulletinCode: '',
+//     signUpEndTime: '2026-02-10T12:00:00.000+08:00',
+//     whetherDeadline: true,
+//     bidSectionStatus: '0',
+//     publishTime: '2026-02-03T14:18:35.000+08:00',
+//     bidEndTime: '2026-02-11T09:00:00.000+08:00',
+//     announcementKey: '8b2717233d4049558bd45642b52b0cad',
+//     attachmentKey: '',
+//     tenderCategory: '6',
+//     noticeType: '1',
+//     bulletinDetailsInfoVoList: [ [Object] ],
+//     whetherShow: 0,
+//     reviewTime: '2026-02-03T17:15:41.000+08:00'
+//   }
+// }
+
+
