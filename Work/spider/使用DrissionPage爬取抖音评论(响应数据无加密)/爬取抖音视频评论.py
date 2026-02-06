@@ -22,7 +22,6 @@ from DrissionPage import Chromium
 from datetime import datetime
 import csv
 
-
 # 创建文件对象
 f = open('output.csv', 'w', encoding='utf-8', newline='')
 # 以字典形式写入
@@ -45,7 +44,8 @@ tab.listen.start('web/comment/list/')
 # 搜索的得到的视频页: https://www.douyin.com/video/7486114666737880330
 # 两种布局不一样
 # 再跳转到目标页面
-tab.get('https://www.douyin.com/video/7486114666737880330')
+# tab.get('https://www.douyin.com/video/7486114666737880330')
+tab.get('https://www.douyin.com/video/7603383340230625787')
 # 循环翻页
 page = 1
 while True:
@@ -60,7 +60,7 @@ while True:
         comments = json_data['comments']
         for comment in comments:
             # 评论区时间转换
-            create_time= comment['create_time'] # 评论区时间戳
+            create_time = comment['create_time']  # 评论区时间戳
             date = str(datetime.fromtimestamp(create_time))
             dic = {
                 "时间": date,
