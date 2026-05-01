@@ -1,0 +1,2621 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 多Agent 逆向工程系统</title>
+<style>
+/* ===== CSS Variables ===== */
+:root {
+  --bg-deep: #040B14;
+  --bg-card: #080F1C;
+  --bg-card2: #0A1525;
+  --bg-card3: #0D1A2E;
+  --cyan: #00E5FF;
+  --cyan-dim: #007A8C;
+  --green: #00FF94;
+  --green-dim: #00623A;
+  --orange: #FF6B35;
+  --orange-dim: #7A3318;
+  --purple: #9B59B6;
+  --purple-dim: #4A2162;
+  --yellow: #FFD600;
+  --yellow-dim: #7A6500;
+  --red: #FF3860;
+  --red-dim: #7A1B2E;
+  --border: rgba(0, 229, 255, 0.12);
+  --border-bright: rgba(0, 229, 255, 0.35);
+  --text-primary: #E8F4FD;
+  --text-secondary: rgba(232, 244, 253, 0.55);
+  --text-dim: rgba(232, 244, 253, 0.3);
+  --glow-cyan: 0 0 20px rgba(0, 229, 255, 0.3);
+  --glow-green: 0 0 20px rgba(0, 255, 148, 0.3);
+  --glow-orange: 0 0 20px rgba(255, 107, 53, 0.3);
+  --glow-gold: 0 0 24px rgba(255, 214, 0, 0.4);
+  --font-sans: 'Microsoft YaHei', 'PingFang SC', 'Segoe UI', sans-serif;
+  --font-mono: Consolas, 'Courier New', monospace;
+  --max-w: 1200px;
+}
+
+/* ===== Reset ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+a { color: inherit; text-decoration: none; }
+
+/* ===== Background Effects ===== */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 229, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: -50%; left: -20%;
+  width: 70%; height: 120%;
+  background: radial-gradient(ellipse, rgba(0, 229, 255, 0.035) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Scan line */
+.scan-line {
+  position: fixed;
+  left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.08), transparent);
+  z-index: 1;
+  pointer-events: none;
+  animation: scanDown 8s linear infinite;
+}
+@keyframes scanDown {
+  0% { top: -2px; }
+  100% { top: 100vh; }
+}
+
+/* ===== Tab Navigation ===== */
+.tab-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 24px;
+  background: rgba(4, 11, 20, 0.92);
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(16px);
+}
+.tab-btn {
+  padding: 8px 20px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+.tab-btn:hover {
+  color: var(--text-secondary);
+  background: rgba(0, 229, 255, 0.04);
+}
+.tab-btn.active {
+  color: var(--cyan);
+  border-color: var(--cyan-dim);
+  background: rgba(0, 229, 255, 0.08);
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.1);
+}
+
+/* ===== Tab Panels ===== */
+.tab-panel {
+  display: none;
+  position: relative;
+  z-index: 2;
+  min-height: calc(100vh - 56px);
+  padding-top: 56px;
+}
+.tab-panel.active { display: block; }
+
+.wrap {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 48px 32px 64px;
+}
+
+/* ===== Section Label ===== */
+.section-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--cyan-dim);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--border-bright), transparent);
+}
+
+/* ===== Common Components ===== */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border: 1px solid var(--cyan-dim);
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--cyan);
+  letter-spacing: 0.08em;
+  background: rgba(0, 229, 255, 0.05);
+}
+.badge::before {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--cyan);
+  animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+.badge-static {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  background: rgba(0, 229, 255, 0.03);
+}
+.badge-static::before { display: none; }
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 24px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 229, 255, 0.06);
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.03), transparent);
+  transition: left 0.6s ease;
+}
+.card:hover::before { left: 100%; }
+
+/* Corner brackets for HUD effect */
+.hud-card {
+  position: relative;
+}
+.hud-card::after {
+  content: '';
+  position: absolute;
+  top: 8px; right: 8px;
+  width: 16px; height: 16px;
+  border-top: 2px solid var(--border-bright);
+  border-right: 2px solid var(--border-bright);
+  pointer-events: none;
+}
+.hud-card-bottom::before {
+  content: '' !important;
+  position: absolute;
+  bottom: 8px; left: 8px;
+  width: 16px; height: 16px;
+  border-bottom: 2px solid var(--border-bright);
+  border-left: 2px solid var(--border-bright);
+  pointer-events: none;
+  background: none !important;
+  left: 8px !important;
+  top: auto !important;
+  width: 16px !important;
+}
+
+/* Grid layouts */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.grid-4x2 { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 1fr); gap: 16px; }
+
+/* ===== Tab 1: Hero ===== */
+.hero-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 56px);
+  text-align: center;
+  padding: 80px 32px;
+}
+#particle-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+}
+.hero-badge-wrap { margin-bottom: 24px; }
+.hero-title {
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  background: linear-gradient(135deg, #E8F4FD 0%, var(--cyan) 50%, var(--green) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 20px;
+}
+.hero-sub {
+  font-size: 17px;
+  color: var(--text-secondary);
+  font-weight: 300;
+  line-height: 1.6;
+  margin-bottom: 48px;
+}
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 780px;
+  width: 100%;
+  margin: 0 auto;
+}
+.stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 28px 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.stat-card::after {
+  content: '';
+  position: absolute;
+  top: 8px; right: 8px;
+  width: 14px; height: 14px;
+  border-top: 2px solid var(--border-bright);
+  border-right: 2px solid var(--border-bright);
+}
+.stat-card .stat-bottom-left {
+  position: absolute;
+  bottom: 8px; left: 8px;
+  width: 14px; height: 14px;
+  border-bottom: 2px solid var(--border-bright);
+  border-left: 2px solid var(--border-bright);
+}
+.stat-card.cyan { border-color: rgba(0, 229, 255, 0.2); }
+.stat-card.cyan .stat-number { color: var(--cyan); text-shadow: 0 0 16px rgba(0, 229, 255, 0.3); }
+.stat-card.green { border-color: rgba(0, 255, 148, 0.2); }
+.stat-card.green .stat-number { color: var(--green); text-shadow: 0 0 16px rgba(0, 255, 148, 0.3); }
+.stat-card.gold { border-color: rgba(255, 214, 0, 0.25); box-shadow: 0 0 24px rgba(255, 214, 0, 0.06); }
+.stat-card.gold .stat-number { color: var(--yellow); text-shadow: 0 0 16px rgba(255, 214, 0, 0.4); }
+.stat-number {
+  font-family: var(--font-mono);
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  line-height: 1;
+}
+.stat-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ===== Tab 2: Problem ===== */
+.problem-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: start;
+}
+.analogy-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px;
+}
+.analogy-box h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: var(--cyan);
+}
+.analogy-box p {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+  margin-bottom: 16px;
+}
+.analogy-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin: 28px 0;
+  padding: 24px;
+  background: var(--bg-deep);
+  border-radius: 8px;
+}
+.box-visual {
+  width: 120px; height: 80px;
+  border: 2px solid var(--border);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 18px;
+  color: var(--text-dim);
+  background: var(--bg-card2);
+  transition: all 0.8s ease;
+  position: relative;
+  overflow: hidden;
+}
+.box-visual.revealed {
+  border-color: var(--green);
+  background: rgba(0, 255, 148, 0.05);
+}
+.box-visual.revealed .box-unknown { display: none; }
+.box-visual.revealed .box-known { display: flex; }
+.box-known {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--green);
+}
+.box-known span {
+  padding: 2px 6px;
+  background: rgba(0, 255, 148, 0.1);
+  border-radius: 3px;
+}
+.arrow-transform {
+  font-size: 28px;
+  color: var(--cyan);
+  animation: pulseArrow 2s ease-in-out infinite;
+}
+@keyframes pulseArrow {
+  0%,100% { opacity: 0.4; transform: translateX(0); }
+  50% { opacity: 1; transform: translateX(4px); }
+}
+.scan-xray {
+  position: absolute;
+  top: 0; left: -100%;
+  width: 30%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 229, 255, 0.15), transparent);
+  animation: xrayScan 3s ease-in-out infinite;
+}
+@keyframes xrayScan {
+  0% { left: -30%; }
+  100% { left: 130%; }
+}
+.compare-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.compare-table th {
+  padding: 14px 18px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dim);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-card2);
+}
+.compare-table th:first-child { width: 80px; }
+.compare-table th:nth-child(2) { color: var(--text-secondary); }
+.compare-table th:last-child { color: var(--cyan); }
+.compare-table td {
+  padding: 12px 18px;
+  font-size: 14px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid rgba(0, 229, 255, 0.06);
+}
+.compare-table tr:last-child td { border-bottom: none; }
+.compare-table td:last-child { color: var(--green); }
+.compare-table td:first-child {
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ===== Tab 3: Team ===== */
+.agent-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+.agent-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+.agent-card-bar {
+  height: 3px;
+  width: 100%;
+}
+.agent-card-body {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.agent-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.agent-icon {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.agent-icon svg { width: 20px; height: 20px; }
+.agent-name {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.agent-role {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+}
+.agent-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 12px;
+  flex: 1;
+}
+.agent-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.agent-tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  background: rgba(0, 229, 255, 0.05);
+  color: var(--text-dim);
+  border: 1px solid rgba(0, 229, 255, 0.08);
+}
+
+/* ===== Tab 4: Flow Animation ===== */
+.flow-section { padding: 32px 0; }
+.flow-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 32px;
+}
+.flow-ctrl-btn {
+  padding: 6px 16px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.flow-ctrl-btn:hover {
+  border-color: var(--cyan-dim);
+  color: var(--cyan);
+}
+.flow-ctrl-btn.active-ctrl {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: rgba(0, 229, 255, 0.08);
+}
+
+.flow-diagram {
+  max-width: 700px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.flow-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.flow-row.multi {
+  gap: 32px;
+  justify-content: center;
+}
+
+.flow-node {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-card);
+  min-width: 180px;
+  opacity: 0.35;
+  transition: all 0.5s ease;
+  position: relative;
+}
+.flow-node.active {
+  opacity: 1;
+  border-color: var(--border-bright);
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.12);
+}
+.flow-node.active .flow-node-icon { transform: scale(1.1); }
+.flow-node.completed {
+  opacity: 0.7;
+  border-color: rgba(0, 255, 148, 0.2);
+}
+
+.flow-node-icon {
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+.flow-node-icon svg { width: 16px; height: 16px; }
+.flow-node-text {
+  display: flex;
+  flex-direction: column;
+}
+.flow-node-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+.flow-node-role {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+}
+
+.flow-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 36px;
+  position: relative;
+  width: 2px;
+}
+.flow-connector-line {
+  width: 2px;
+  height: 100%;
+  background: var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.flow-connector-line.active::after {
+  content: '';
+  position: absolute;
+  top: -100%; left: 0;
+  width: 100%; height: 60%;
+  background: linear-gradient(180deg, transparent, var(--cyan), transparent);
+  animation: flowPulse 1.5s linear infinite;
+}
+@keyframes flowPulse { to { top: 200%; } }
+
+.flow-connector-branch {
+  display: flex;
+  justify-content: center;
+  height: 36px;
+  position: relative;
+  width: 100%;
+}
+
+/* Branch connectors (split 1 into 3) */
+.branch-svg {
+  width: 100%;
+  height: 36px;
+}
+.branch-svg path {
+  stroke: var(--border);
+  stroke-width: 2;
+  fill: none;
+}
+.branch-svg path.active {
+  stroke: var(--cyan-dim);
+  filter: drop-shadow(0 0 4px rgba(0, 229, 255, 0.3));
+}
+
+/* Gate annotation */
+.gate-label {
+  position: absolute;
+  right: -180px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--yellow);
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 214, 0, 0.2);
+  border-radius: 4px;
+  background: rgba(255, 214, 0, 0.05);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.gate-label.visible { opacity: 1; }
+.gate-label::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: 4px solid transparent;
+  border-right-color: rgba(255, 214, 0, 0.3);
+}
+
+/* Recursive loop indicator */
+.recursive-loop {
+  position: absolute;
+  right: -100px;
+  top: 0; bottom: 0;
+  width: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.recursive-loop.visible { opacity: 1; }
+.recursive-loop path {
+  stroke: var(--orange-dim);
+  stroke-width: 1.5;
+  fill: none;
+  stroke-dasharray: 4 4;
+}
+.recursive-loop span {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--orange);
+  margin-top: 4px;
+}
+
+/* Phase indicator */
+.flow-phase-text {
+  text-align: center;
+  margin-top: 24px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--cyan);
+  min-height: 20px;
+  opacity: 0.8;
+}
+
+/* ===== Tab 5: Case Study ===== */
+.case-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.case-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, var(--text-primary), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.case-subtitle {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+}
+.case-badges {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.case-badge {
+  padding: 4px 12px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  background: var(--bg-card);
+}
+
+/* Timeline */
+.timeline {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  margin-bottom: 56px;
+  padding: 0 20px;
+}
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 16px;
+  left: 60px; right: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--cyan-dim), var(--green-dim), var(--cyan-dim));
+}
+.tl-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 180px;
+  text-align: center;
+  position: relative;
+  cursor: default;
+}
+.tl-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--cyan-dim);
+  background: var(--bg-deep);
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+.tl-item:hover .tl-dot {
+  border-color: var(--cyan);
+  box-shadow: 0 0 12px rgba(0, 229, 255, 0.3);
+  background: var(--cyan);
+}
+.tl-round {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--cyan-dim);
+  margin-bottom: 4px;
+}
+.tl-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.tl-desc {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.5;
+  max-width: 160px;
+}
+.tl-item:hover .tl-desc { color: var(--text-secondary); }
+
+/* Dashboard metrics */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 40px;
+}
+.metric-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.metric-ring {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+  position: relative;
+}
+.metric-ring.ring-green {
+  background: conic-gradient(var(--green) 100%, var(--bg-card2) 0%);
+  color: var(--bg-deep);
+}
+.metric-ring.ring-cyan {
+  background: conic-gradient(var(--cyan) 86%, var(--bg-card2) 0%);
+  color: var(--bg-deep);
+}
+.metric-ring.ring-gold {
+  background: conic-gradient(var(--yellow) 100%, var(--bg-card2) 0%);
+  color: var(--bg-deep);
+}
+.metric-ring::after {
+  content: '';
+  position: absolute;
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  background: var(--bg-card);
+}
+.metric-ring span {
+  position: relative;
+  z-index: 1;
+}
+.metric-info {}
+.metric-value {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.metric-label {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+/* Artifacts */
+.artifact-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.artifact-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  transition: all 0.2s ease;
+}
+.artifact-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-2px);
+}
+.artifact-name {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--cyan);
+  margin-bottom: 6px;
+}
+.artifact-desc {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+/* ===== Tab 6: Highlights ===== */
+.highlight-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.highlight-grid .full-width {
+  grid-column: 1 / -1;
+}
+.highlight-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 28px;
+  display: flex;
+  gap: 20px;
+  transition: all 0.3s ease;
+}
+.highlight-card:hover {
+  border-color: var(--border-bright);
+  transform: translateY(-2px);
+}
+.hl-icon {
+  width: 48px; height: 48px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.hl-icon svg { width: 24px; height: 24px; }
+.hl-content {}
+.hl-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.hl-analogy {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+.hl-evidence {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  padding: 8px 12px;
+  background: var(--bg-deep);
+  border-radius: 4px;
+  border-left: 2px solid var(--cyan-dim);
+}
+
+/* ===== Tab 7: Summary ===== */
+.summary-section { text-align: center; }
+.summary-quote {
+  font-size: 22px;
+  font-weight: 300;
+  line-height: 1.6;
+  max-width: 700px;
+  margin: 0 auto 56px;
+  color: var(--text-primary);
+  padding: 0 20px;
+}
+.summary-quote em {
+  color: var(--cyan);
+  font-style: normal;
+  font-weight: 500;
+}
+
+.value-triangle {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 56px;
+}
+.value-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 28px 24px;
+  text-align: center;
+}
+.value-card h3 {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.value-card .value-sub {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  margin-bottom: 14px;
+}
+.value-card p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.dept-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  margin-bottom: 48px;
+}
+.dept-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px 14px;
+  text-align: center;
+}
+.dept-card h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.dept-card p {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.closing-text {
+  font-size: 18px;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin: 0 auto;
+}
+.closing-text strong {
+  color: var(--cyan);
+  font-weight: 500;
+}
+
+/* ===== Fade-in Animation ===== */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== Responsive Hint ===== */
+@media (max-width: 1100px) {
+  .grid-4x2 { grid-template-columns: repeat(2, 1fr); }
+  .artifact-grid { grid-template-columns: repeat(2, 1fr); }
+  .dept-grid { grid-template-columns: repeat(3, 1fr); }
+  .timeline { flex-wrap: wrap; gap: 20px; }
+  .timeline::before { display: none; }
+  .problem-section { grid-template-columns: 1fr; }
+  .highlight-grid { grid-template-columns: 1fr; }
+}
+
+/* ===== Mobile Responsive ===== */
+@media (max-width: 768px) {
+  .tab-nav {
+    gap: 2px;
+    padding: 8px 8px;
+    overflow-x: auto;
+    justify-content: flex-start;
+    -webkit-overflow-scrolling: touch;
+  }
+  .tab-nav::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+  .wrap { padding: 28px 16px 48px; }
+  .tab-panel { padding-top: 52px; min-height: auto; }
+
+  /* Hero */
+  .hero-panel { padding: 56px 16px; }
+  .hero-title { font-size: 28px; }
+  .hero-sub { font-size: 14px; }
+  .hero-stats { grid-template-columns: 1fr; gap: 12px; }
+  .stat-number { font-size: 32px; }
+
+  /* Grids */
+  .grid-2 { grid-template-columns: 1fr; }
+  .grid-3 { grid-template-columns: 1fr; }
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid-4x2 { grid-template-columns: 1fr; }
+  .highlight-grid { grid-template-columns: 1fr; }
+  .highlight-grid .full-width { grid-column: 1; }
+  .artifact-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .dashboard-grid { grid-template-columns: 1fr; }
+  .problem-section { grid-template-columns: 1fr; }
+
+  /* Team cards */
+  .agent-card-body { padding: 16px; }
+
+  /* Flow animation */
+  .flow-row.multi { gap: 10px; flex-wrap: wrap; }
+  .flow-row.multi .flow-node { min-width: 140px; flex: 1; }
+  .flow-node { min-width: auto; padding: 8px 12px; }
+  .gate-label { display: none; }
+
+  /* Timeline */
+  .timeline { flex-direction: column; align-items: stretch; padding: 0; }
+  .timeline::before { display: none; }
+  .tl-item { width: 100%; flex-direction: row; text-align: left; gap: 12px; padding: 8px 0; }
+  .tl-dot { margin-bottom: 0; flex-shrink: 0; }
+  .tl-desc { max-width: none; }
+
+  /* Summary - before/after */
+  .summary-quote { font-size: 17px; }
+  .value-triangle { grid-template-columns: 1fr; }
+
+  /* Department grid */
+  .dept-grid, #panel-7 .fade-in > div[style*="grid-template-columns: repeat(5"] {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  /* Protocol cards */
+  .card { padding: 16px; }
+
+  /* Difficulty cards */
+  #panel-1 .fade-in > div[style*="grid-template-columns: repeat(3"] {
+    grid-template-columns: 1fr !important;
+  }
+  #panel-1 .fade-in > div[style*="grid-template-columns: repeat(2"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Section titles */
+  h2 { font-size: 22px !important; }
+
+  /* Level ladder */
+  #panel-5 .fade-in > div[style*="display:flex;align-items:flex-end"] {
+    flex-wrap: wrap; gap: 8px;
+  }
+  #panel-5 .fade-in > div[style*="display:flex;align-items:flex-end"] > div {
+    flex: 1 1 45%; min-width: 100px;
+  }
+
+  /* Summary before/after */
+  #panel-7 .fade-in > div[style*="grid-template-columns: 1fr auto 1fr"] {
+    grid-template-columns: 1fr !important; gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .tab-btn { padding: 5px 8px; font-size: 11px; }
+  .wrap { padding: 20px 12px 40px; }
+  .hero-title { font-size: 24px; }
+  .grid-4 { grid-template-columns: 1fr; }
+  .artifact-grid { grid-template-columns: 1fr; }
+  .flow-row.multi .flow-node { min-width: 100%; }
+  .stat-number { font-size: 28px; }
+  .stat-card { padding: 20px 16px; }
+}
+</style>
+</head>
+<body>
+<div class="scan-line"></div>
+
+<!-- ===== Navigation ===== -->
+<nav class="tab-nav">
+  <button class="tab-btn active" data-tab="0">首页</button>
+  <button class="tab-btn" data-tab="1">问题</button>
+  <button class="tab-btn" data-tab="2">团队</button>
+  <button class="tab-btn" data-tab="3">流程</button>
+  <button class="tab-btn" data-tab="4">规范</button>
+  <button class="tab-btn" data-tab="5">案例</button>
+  <button class="tab-btn" data-tab="6">亮点</button>
+  <button class="tab-btn" data-tab="7">总结</button>
+</nav>
+
+<main>
+<!-- ===== Tab 1: Hero ===== -->
+<section class="tab-panel active" id="panel-0">
+  <div class="hero-panel">
+    <canvas id="particle-canvas"></canvas>
+    <div class="hero-content">
+      <div class="hero-badge-wrap">
+        <span class="badge">AI MULTI-AGENT // REVERSE ENGINEERING</span>
+      </div>
+      <h1 class="hero-title">AI 多Agent<br>逆向工程系统</h1>
+      <p class="hero-sub">
+        8 个 AI Agent 协同工作，85 轮自动完成复杂 JS 逆向分析<br>
+        相当于资深工程师 <strong style="color:var(--cyan)">2 周以上</strong> 的工作量——全程无需人工干预
+      </p>
+      <div class="hero-stats">
+        <div class="stat-card cyan">
+          <div class="stat-number" data-target="85">0</div>
+          <div class="stat-label">轮自动完成<br>全部逆向分析</div>
+          <span class="stat-bottom-left"></span>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-number" id="stat-verify" data-pass="50" data-fail="0" data-skip="3">0/0/0</div>
+          <div class="stat-label">验证结果<br>PASS / FAIL / SKIP</div>
+          <span class="stat-bottom-left"></span>
+        </div>
+        <div class="stat-card gold">
+          <div class="stat-number" id="stat-level">--</div>
+          <div class="stat-label">最高完成等级<br>客户端独立运行</div>
+          <span class="stat-bottom-left"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Tab 2: Problem ===== -->
+<section class="tab-panel" id="panel-1">
+  <div class="wrap">
+    <div class="section-label">BACKGROUND // 问题背景</div>
+    <h2 style="font-size:28px;font-weight:700;margin-bottom:36px;">什么是 JS 逆向分析？</h2>
+    <div class="problem-section">
+      <div class="analogy-box fade-in">
+        <h3>保险箱的比喻</h3>
+        <p>
+          想象一个网站是一个保险箱，里面装着秘密配方。保险箱的锁极其复杂——不是简单的钥匙，而是一系列精密的齿轮和杠杆，必须以精确的顺序激活才能打开。
+        </p>
+        <div class="analogy-visual">
+          <div class="box-visual" id="blackBox">
+            <span class="box-unknown">? ? ?</span>
+            <div class="box-known">
+              <span>SHA256</span>
+              <span>HMAC</span>
+              <span>BASE64</span>
+            </div>
+            <div class="scan-xray"></div>
+          </div>
+          <span class="arrow-transform">&rarr;</span>
+          <div class="box-visual revealed">
+            <div class="box-known" style="display:flex">
+              <span>SHA256</span>
+              <span>HMAC</span>
+              <span>BASE64</span>
+            </div>
+          </div>
+        </div>
+        <p>
+          <strong style="color:var(--text-secondary)">传统方式</strong>：一个人在外面按按钮、看反应、记笔记，靠猜测理解锁的原理——耗时数天甚至数周。
+        </p>
+        <p>
+          <strong style="color:var(--cyan)">AI Agent 方式</strong>：8 个 AI 专家组成的团队，拥有 X 光透视能力，能同时看到保险箱内部每个齿轮的转动，自动验证理解是否正确，最终造出一个完全一样的锁。
+        </p>
+      </div>
+      <div class="fade-in" style="animation-delay:0.2s">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>传统方式</th>
+              <th>AI Agent 方式</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>谁来做</td>
+              <td>1 个人类专家</td>
+              <td>8 个 AI Agent 协作</td>
+            </tr>
+            <tr>
+              <td>怎么做</td>
+              <td>手动调试 + 经验猜测</td>
+              <td>系统化注入 + 分析 + 三层验证</td>
+            </tr>
+            <tr>
+              <td>耗时</td>
+              <td>数天到数周</td>
+              <td>数小时（85 轮自动完成）</td>
+            </tr>
+            <tr>
+              <td>质量保证</td>
+              <td>人工复查（如果有的话）</td>
+              <td>静态 + 运行 + 对抗三层验证</td>
+            </tr>
+            <tr>
+              <td>产出物</td>
+              <td>零散的分析笔记</td>
+              <td>完整 API 客户端 + 验证脚本 + 文档</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Difficulty Section -->
+    <div class="section-label" style="margin-top:40px">DIFFICULTY // 到底有多难？</div>
+    <p style="color:var(--text-secondary);margin-bottom:24px;font-size:15px;max-width:720px">
+      以京东 h5st 签名为例——网站为了防止自动化访问，会给每个请求加一个"签名"。生成这个签名的 JS 代码经过了层层防护，<strong style="color:var(--cyan)">每多一层，逆向难度就翻倍</strong>。
+    </p>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px">
+      <div class="card fade-in" style="border-left:3px solid var(--red)">
+        <div style="font-size:15px;font-weight:600;margin-bottom:8px;color:var(--red)">代码混淆</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:10px">
+          所有变量名被替换成无意义的字符串，函数被层层嵌套包装，控制流被打乱成跳转表。人眼读起来就是一堆乱码。
+        </div>
+        <div style="font-family:var(--font-mono);font-size:12px;padding:8px 10px;background:var(--bg-deep);border-radius:4px;color:var(--text-dim);line-height:1.5">
+          <span style="color:var(--red)">JD 实际代码：</span><br>
+          function <span style="color:var(--orange)">_0x3a7f</span>(<span style="color:var(--orange)">_0x2b1c</span>) {<br>
+          &nbsp;&nbsp;var <span style="color:var(--orange)">_0x4e8d</span> = <span style="color:var(--orange)">_0x2b1c</span>[<span style="color:var(--orange)">_0x5f9a</span>(0x1a3)];<br>
+          &nbsp;&nbsp;return <span style="color:var(--orange)">_0x4e8d</span> ? <span style="color:var(--orange)">_0x2b1c</span>[<span style="color:var(--orange)">_0x5f9a</span>(0x1b7)] : <span style="color:var(--orange)">_0x3e2f</span>;
+        </div>
+      </div>
+
+      <div class="card fade-in" style="border-left:3px solid var(--orange);animation-delay:0.1s">
+        <div style="font-size:15px;font-weight:600;margin-bottom:8px;color:var(--orange)">自定义虚拟机</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:10px">
+          代码不是直接执行的，而是被编译成自定义"字节码"，由一个解释器逐条读取运行。等于在程序里面又套了一层程序。
+        </div>
+        <div style="background:var(--bg-deep);border-radius:4px;padding:8px 10px;font-family:var(--font-mono);font-size:12px;color:var(--text-dim);line-height:1.5">
+          <span style="color:var(--orange)">JD 实际情况：</span><br>
+          发现 <span style="color:var(--yellow);font-weight:600">5 个</span> 独立的 VM 字节码解释器<br>
+          每个 VM 有自己的指令集和操作码<br>
+          花了 <span style="color:var(--yellow);font-weight:600">40 轮</span>（R38-R78）才逐个击破
+        </div>
+      </div>
+
+      <div class="card fade-in" style="border-left:3px solid var(--purple);animation-delay:0.2s">
+        <div style="font-size:15px;font-weight:600;margin-bottom:8px;color:var(--purple)">多层加密嵌套</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.7;margin-bottom:10px">
+          一个签名不是简单的"加密一次"。数据经过多次变换——先排序、再拼接、再哈希、再编码……中间任何一步理解错了，最终结果就全错。
+        </div>
+        <div style="background:var(--bg-deep);border-radius:4px;padding:8px 10px;font-family:var(--font-mono);font-size:12px;color:var(--text-dim);line-height:1.5">
+          <span style="color:var(--purple)">JD h5st 签名结构：</span><br>
+          <span style="color:var(--yellow)">10 段</span> 分号分隔<br>
+          每段由不同算法独立生成<br>
+          段与段之间有依赖关系<br>
+          输出格式: <span style="color:var(--green)">ts;fp;appId;tk;h1;v;t;c;h2;a</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px">
+      <div class="card fade-in" style="border-left:3px solid var(--cyan);animation-delay:0.3s">
+        <div style="font-size:15px;font-weight:600;margin-bottom:8px;color:var(--cyan)">反调试与环境检测</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.7">
+          网站会检测你是否在用开发者工具、是否在模拟浏览器环境。一旦检测到异常，加密函数会返回错误结果——<strong style="color:var(--text-primary)">看起来像正常工作，但输出是错的</strong>。更狡猾的是，有些代码会检测屏幕分辨率、Canvas 指纹等，确保运行环境是"真实的浏览器"。
+        </div>
+      </div>
+      <div class="card fade-in" style="border-left:3px solid var(--yellow);animation-delay:0.4s">
+        <div style="font-size:15px;font-weight:600;margin-bottom:8px;color:var(--yellow)">体积与复杂度</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.7">
+          JD 的签名算法藏在一段 <strong style="color:var(--yellow)">241KB</strong> 的混淆 JS 文件中。这不是 241KB 的普通代码——其中大量是死代码、陷阱分支、字符串加密函数。真正的核心逻辑被埋在几千行"垃圾"中，<strong style="color:var(--text-primary)">像大海捞针</strong>，而且针还会伪装成海水。
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;padding:20px;background:var(--bg-card);border:1px solid var(--border);border-radius:10px" class="fade-in">
+      <div style="font-size:14px;color:var(--text-secondary)">
+        这些防护不是单独出现的——它们<strong style="color:var(--red)">组合叠加</strong>。混淆 + VM + 多层加密 + 反调试 + 大文件，使得人工逆向需要极高的专业能力和大量时间投入。
+      </div>
+      <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);font-size:15px;color:var(--text-primary);line-height:1.7">
+        这类任务人能不能做？<strong style="color:var(--text-primary)">能做，但非常耗时耗力</strong>——需要资深专家投入大量时间反复调试、验证、踩坑、重来。<br>
+        而 AI Agent 系统的价值在于：<strong style="color:var(--cyan)">把"专家花两周反复调试"的事，变成"一次启动、自动完成"</strong>——7x24 不知疲倦、多角色交叉验证、85 轮迭代自动收敛。
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== Tab 3: Team ===== -->
+<section class="tab-panel" id="panel-2">
+  <div class="wrap">
+    <div class="section-label">THE TEAM // AI 团队</div>
+    <h2 style="font-size:28px;font-weight:700;margin-bottom:12px;">8 个专业 Agent，各司其职</h2>
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:20px 24px;margin-bottom:32px;display:flex;gap:24px;align-items:start" class="fade-in">
+      <div style="width:40px;height:40px;border-radius:8px;background:rgba(0,229,255,0.08);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      </div>
+      <div>
+        <div style="font-size:15px;font-weight:600;margin-bottom:6px;color:var(--cyan)">为什么需要 8 个 Agent，而不是一个大 Agent 全包？</div>
+        <div style="font-size:14px;color:var(--text-secondary);line-height:1.8">
+          就像医院不会让一个医生同时负责诊断、化验、拍片、审核、开药——每个环节需要<strong style="color:var(--text-primary)">不同的专业视角</strong>和<strong style="color:var(--text-primary)">独立的验证逻辑</strong>。特别是"魔鬼代言人"（Adversary），它的职责就是推翻其他 Agent 的结论——如果分析者和验证者是同一个人，就失去了交叉验证的意义。
+        </div>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:14px;color:var(--text-secondary);line-height:1.8">
+          还有一个关键原因：<strong style="color:var(--cyan)">上下文隔离</strong>。每个 Agent 启动时都是全新的上下文空间，只接收当前任务的指令和必要的背景信息。如果把所有工作塞进一个大 Agent，85 轮对话积累的海量细节会互相干扰——前面的推测被当成事实、过时的假设影响新判断、关键证据在上下文压缩时被丢弃。独立 Agent 天然避免了这些<strong style="color:var(--text-primary)">"记忆污染"</strong>问题。
+        </div>
+      </div>
+    </div>
+    <div class="grid-4x2">
+
+      <!-- PM -->
+      <div class="agent-card fade-in">
+        <div class="agent-card-bar" style="background:var(--cyan)"></div>
+        <div class="agent-card-body">
+          <div class="agent-card-header">
+            <div class="agent-icon" style="background:rgba(0,229,255,0.1)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
+            <div>
+              <div class="agent-name" style="color:var(--cyan)">PM</div>
+              <div class="agent-role">指挥官</div>
+            </div>
+          </div>
+          <div class="agent-desc">像项目指挥官，拆解任务目标，分配给合适的队员，追踪每一步进展，并持续更新团队的"作战地图"。</div>
+          <div class="agent-tags">
+            <span class="agent-tag">任务拆解</span>
+            <span class="agent-tag">调度决策</span>
+            <span class="agent-tag">知识图谱</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Injector -->
+      <div class="agent-card fade-in" style="animation-delay:0.05s">
+        <div class="agent-card-bar" style="background:var(--orange)"></div>
+        <div class="agent-card-body">
+          <div class="agent-card-header">
+            <div class="agent-icon" style="background:rgba(255,107,53,0.1)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round"><path d="M2 12h5m3-7l-3 7 3 7m5-7h3m3 0h2"/></svg>
+            </div>
+            <div>
+              <div class="agent-name" style="color:var(--orange)">Injector</div>
+              <div class="agent-role">侦察兵</div>
+            </div>
+          </div>
+          <div class="agent-desc">像侦察兵，在目标代码中植入"微型监听器"，让我们能听到加密算法的内部对话。</div>
+          <div class="agent-tags">
+            <span class="agent-tag">代码注入</span>
+            <span class="agent-tag">渐进Hook</span>
+            <span class="agent-tag">日志采集</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Analyzer -->
+      <div class="agent-card fade-in" style="animation-delay:0.1s">
+        <div class="agent-card-bar" style="background:var(--cyan)"></div>
+        <div class="agent-card-body">
+          <div class="agent-card-header">
+            <div class="agent-icon" style="background:rgba(0,229,255,0.1)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </div>
+            <div>
+              <div class="agent-name" style="color:var(--cyan)">Analyzer</div>
+              <div class="agent-role">密码学家</div>
+            </div>
+          </div>
+          <div class="agent-desc">像密码学家，解读侦察兵收集的情报，追踪数据如何被加密和变换，还原算法真相。</div>
+          <div class="agent-tags">
+            <span class="agent-tag">日志分析</span>
+            <span class="agent-tag">算法还原</span>
+            <span class="agent-tag">调用链追踪</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reviewer -->
+      <div class="agent-card fade-in" style="animation-delay:0.15s">
+        <div class="agent-card-bar" style="background:var(--purple)"></div>
+        <div class="agent-card-body">
+          <div class="agent-card-header">
+            <div class="agent-icon" style="background:rgba(155,89,182,0.1)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round"><path d="M9 12l2 2 4-4"/><rect x="3" y="3" width="18" height="18" rx="3"/></svg>
+            </div>
+            <div>
+              <div class="agent-name" style="color:var(--purple)">Reviewer</div>
+              <div class="agent-role">质检员</div>
+            </div>
+          </div>
+          <div class="agent-desc">像质检员，复核密码学家的每一项结论——证据够不够？逻辑通不通？有没有遗漏？</div>
+          <div class="agent-tags">
+            <span class="agent-tag">结论审核</span>
+            <span class="agent-tag">证据检查</span>
+            <span class="agent-tag">质量把关</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Static Verifier -->
+      <div class="agent-card fade-in" style="animation-delay:0.2s">
+        <div class="agent-card-bar" style="background:var(--green)"></div>
+        <div class="agent-card-body">
+          <div class="agent-card-header">
+            <div class="agent-icon" style="background:rgba(0,255,148,0.1)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            </div>
+            <div>
+              <div class="agent-name" style="color:var(--green)">Static Verifier</div>
+              <div class="agent-role">审计员</div>
+            </div>
+          </div>
+          <div class="agent-desc">像文档审计员，拿着源代码逐行对照分析结论，确保纸上写的和实际代码完全一致。</div>
+          <div class="agent-tags">
+            <span class="agent-tag">AST验证</span>
+            <span class="agent-tag">源码对照</span>
+            <span class="agent-tag">证据链</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Runtime Verifier -->
+      <div class="agent-card fade-in" style="animation-delay:0.25s">
+        <div class="agent-card-bar" style="background:var(--green)"></div>
+        <div class="agent-card-body">
+          <div class="agent-card-header">
+            <div class="agent-icon" style="background:rgba(0,255,148,0.1)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16"/></svg>
+            </div>
+            <div>
+              <div class="agent-name" style="color:var(--green)">Runtime Verifier</div>
+              <div class="agent-role">实验员</div>
+            </div>
+          </div>
+          <div class="agent-desc">像实验室研究员，设计并运行精巧的实验，用真实运行结果验证算法假设是否正确。</div>
+          <div class="agent-tags">
+            <span class="agent-tag">差分分析</span>
+            <span class="agent-tag">运行实验</span>
+            <span class="agent-tag">方法 A-J</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Adversary -->
+      <div class="agent-card fade-in" style="animation-delay:0.3s">
+        <div class="agent-card-bar" style="background:var(--red)"></div>
+        <div class="agent-card-body">
+          <div class="agent-card-header">
+            <div class="agent-icon" style="background:rgba(255,56,96,0.1)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+            </div>
+            <div>
+              <div class="agent-name" style="color:var(--red)">Adversary</div>
+              <div class="agent-role">魔鬼代言人</div>
+            </div>
+          </div>
+          <div class="agent-desc">故意唱反调——专门找反例、提替代解释、质疑证据，确保结论经得起最严厉的拷问。</div>
+          <div class="agent-tags">
+            <span class="agent-tag">对抗验证</span>
+            <span class="agent-tag">反例搜索</span>
+            <span class="agent-tag">信心校准</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Node Integrator -->
+      <div class="agent-card fade-in" style="animation-delay:0.35s">
+        <div class="agent-card-bar" style="background:var(--green)"></div>
+        <div class="agent-card-body">
+          <div class="agent-card-header">
+            <div class="agent-icon" style="background:rgba(0,255,148,0.1)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10"/></svg>
+            </div>
+            <div>
+              <div class="agent-name" style="color:var(--green)">Integrator</div>
+              <div class="agent-role">集成工程师</div>
+            </div>
+          </div>
+          <div class="agent-desc">像集成工程师，将所有验证过的算法组装成可运行的产品——一个能独立工作的 API 客户端。</div>
+          <div class="agent-tags">
+            <span class="agent-tag">Node.js集成</span>
+            <span class="agent-tag">端到端验证</span>
+            <span class="agent-tag">API客户端</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== Tab 4: Flow Animation ===== -->
+<section class="tab-panel" id="panel-3">
+  <div class="wrap">
+    <div class="section-label">WORKFLOW // 协作流程</div>
+    <h2 style="font-size:28px;font-weight:700;margin-bottom:8px;text-align:center;">Agent 协作流程动画</h2>
+    <p style="text-align:center;color:var(--text-dim);margin-bottom:12px;font-size:14px;">展示一轮完整的 Agent 调度过程。实际任务中，PM 会<strong style="color:var(--cyan)">反复循环</strong>这个流程——直到所有结论被验证</p>
+    <p style="text-align:center;margin-bottom:28px;font-size:13px;color:var(--yellow);font-family:var(--font-mono);opacity:0.7">JD 案例：85 轮 = 这个循环跑了 85 次</p>
+
+    <div class="flow-controls">
+      <button class="flow-ctrl-btn active-ctrl" id="flow-play" onclick="flowAnimator.play()">&#9654; 播放</button>
+      <button class="flow-ctrl-btn" id="flow-pause" onclick="flowAnimator.pause()">&#10074;&#10074; 暂停</button>
+      <button class="flow-ctrl-btn" id="flow-replay" onclick="flowAnimator.reset();flowAnimator.play()">&#8634; 重播</button>
+    </div>
+
+    <div class="flow-diagram" id="flow-diagram">
+      <!-- Row 0: User -->
+      <div class="flow-row">
+        <div class="flow-node" id="fn-user" style="border-color:rgba(232,244,253,0.2)">
+          <div class="flow-node-icon" style="background:rgba(232,244,253,0.1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#E8F4FD" stroke-width="2" stroke-linecap="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div class="flow-node-text">
+            <div class="flow-node-name">用户</div>
+            <div class="flow-node-role">输入目标</div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-connector"><div class="flow-connector-line" id="fc-01"></div></div>
+
+      <!-- Row 1: PM -->
+      <div class="flow-row" style="position:relative">
+        <div class="flow-node" id="fn-pm1" data-color="cyan">
+          <div class="flow-node-icon" style="background:rgba(0,229,255,0.1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <div class="flow-node-text">
+            <div class="flow-node-name" style="color:var(--cyan)">PM 指挥官</div>
+            <div class="flow-node-role">拆解任务 · 调度Agent</div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-connector"><div class="flow-connector-line" id="fc-12"></div></div>
+
+      <!-- Row 2: Injector -->
+      <div class="flow-row">
+        <div class="flow-node" id="fn-injector" data-color="orange">
+          <div class="flow-node-icon" style="background:rgba(255,107,53,0.1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round"><path d="M2 12h5m3-7l-3 7 3 7m5-7h3m3 0h2"/></svg>
+          </div>
+          <div class="flow-node-text">
+            <div class="flow-node-name" style="color:var(--orange)">Injector 侦察兵</div>
+            <div class="flow-node-role">植入监听器 · 采集日志</div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-connector"><div class="flow-connector-line" id="fc-23"></div></div>
+
+      <!-- Row 3: Analyzer -->
+      <div class="flow-row">
+        <div class="flow-node" id="fn-analyzer" data-color="cyan">
+          <div class="flow-node-icon" style="background:rgba(0,229,255,0.1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <div class="flow-node-text">
+            <div class="flow-node-name" style="color:var(--cyan)">Analyzer 密码学家</div>
+            <div class="flow-node-role">分析日志 · 还原算法</div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-connector"><div class="flow-connector-line" id="fc-34"></div></div>
+
+      <!-- Row 4: Reviewer Gate -->
+      <div class="flow-row" style="position:relative">
+        <div class="flow-node" id="fn-reviewer" data-color="purple">
+          <div class="flow-node-icon" style="background:rgba(155,89,182,0.1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round"><path d="M9 12l2 2 4-4"/><rect x="3" y="3" width="18" height="18" rx="3"/></svg>
+          </div>
+          <div class="flow-node-text">
+            <div class="flow-node-name" style="color:var(--purple)">Reviewer 质检员</div>
+            <div class="flow-node-role">审核结论 · 证据检查</div>
+          </div>
+        </div>
+        <div class="gate-label" id="gate-reviewer">REVIEWER GATE<br><span style="color:var(--text-dim);font-size:9px">通过才可继续</span></div>
+      </div>
+
+      <!-- Branch connector -->
+      <div class="flow-connector-branch">
+        <svg class="branch-svg" viewBox="0 0 500 36" preserveAspectRatio="none">
+          <path id="branch-left" d="M250,0 L100,36"/>
+          <path id="branch-center" d="M250,0 L250,36"/>
+          <path id="branch-right" d="M250,0 L400,36"/>
+        </svg>
+      </div>
+
+      <!-- Row 5: 3-way verification -->
+      <div class="flow-row multi">
+        <div class="flow-node" id="fn-static" data-color="green" style="min-width:160px">
+          <div class="flow-node-icon" style="background:rgba(0,255,148,0.1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          </div>
+          <div class="flow-node-text">
+            <div class="flow-node-name" style="color:var(--green)">审计员</div>
+            <div class="flow-node-role">源码对照</div>
+          </div>
+        </div>
+        <div class="flow-node" id="fn-runtime" data-color="green" style="min-width:160px">
+          <div class="flow-node-icon" style="background:rgba(0,255,148,0.1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16"/></svg>
+          </div>
+          <div class="flow-node-text">
+            <div class="flow-node-name" style="color:var(--green)">实验员</div>
+            <div class="flow-node-role">运行实验</div>
+          </div>
+        </div>
+        <div class="flow-node" id="fn-adversary" data-color="red" style="min-width:160px">
+          <div class="flow-node-icon" style="background:rgba(255,56,96,0.1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          </div>
+          <div class="flow-node-text">
+            <div class="flow-node-name" style="color:var(--red)">魔鬼代言人</div>
+            <div class="flow-node-role">找反例</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Merge connector -->
+      <div class="flow-connector-branch">
+        <svg class="branch-svg" viewBox="0 0 500 36" preserveAspectRatio="none">
+          <path d="M100,0 L250,36"/>
+          <path d="M250,0 L250,36"/>
+          <path d="M400,0 L250,36"/>
+        </svg>
+      </div>
+
+      <!-- Row 6: PM synthesis -->
+      <div class="flow-row" style="position:relative">
+        <div class="flow-node" id="fn-pm2" data-color="cyan">
+          <div class="flow-node-icon" style="background:rgba(0,229,255,0.1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          </div>
+          <div class="flow-node-text">
+            <div class="flow-node-name" style="color:var(--cyan)">PM 指挥官</div>
+            <div class="flow-node-role">汇总结果 · 检查上游依赖</div>
+          </div>
+        </div>
+        <div class="gate-label" id="gate-contradiction" style="color:var(--red);border-color:rgba(255,56,96,0.2);background:rgba(255,56,96,0.05)">CONTRADICTION GATE<br><span style="color:var(--text-dim);font-size:9px">冲突时自动降级回退</span></div>
+        <div class="gate-label" id="gate-recursive" style="right:auto;left:-180px;color:var(--orange);border-color:rgba(255,107,53,0.2);background:rgba(255,107,53,0.05)">
+          <span style="font-size:9px;color:var(--text-dim)">发现加密上游依赖？</span><br>递归子目标逆向
+        </div>
+      </div>
+      <div class="flow-connector"><div class="flow-connector-line" id="fc-67"></div></div>
+
+      <!-- Row 7: Integrator -->
+      <div class="flow-row">
+        <div class="flow-node" id="fn-integrator" data-color="green">
+          <div class="flow-node-icon" style="background:rgba(0,255,148,0.1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><polygon points="13,2 3,14 12,14 11,22 21,10 12,10"/></svg>
+          </div>
+          <div class="flow-node-text">
+            <div class="flow-node-name" style="color:var(--green)">Integrator 工程师</div>
+            <div class="flow-node-role">构建 Node.js 实现</div>
+          </div>
+        </div>
+      </div>
+      <div class="flow-connector"><div class="flow-connector-line" id="fc-78"></div></div>
+
+      <!-- Row 8: Output -->
+      <div class="flow-row">
+        <div class="flow-node" id="fn-output" style="border-color:rgba(255,214,0,0.2)">
+          <div class="flow-node-icon" style="background:rgba(255,214,0,0.1)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="var(--yellow)" stroke-width="2" stroke-linecap="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22,4 12,14.01 9,11.01"/></svg>
+          </div>
+          <div class="flow-node-text">
+            <div class="flow-node-name" style="color:var(--yellow)">Level A+ 完成</div>
+            <div class="flow-node-role">客户端集成验证通过</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-phase-text" id="flow-phase-text"></div>
+    </div>
+
+    <!-- Infrastructure Layer -->
+    <div style="margin-top:48px;padding-top:32px;border-top:1px solid var(--border)">
+      <div class="section-label">INFRASTRUCTURE // 支撑层</div>
+      <p style="text-align:center;color:var(--text-secondary);margin-bottom:24px;font-size:14px">这个流程能跑起来，底层依赖三样东西——<strong style="color:var(--cyan)">缺一不可</strong></p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:24px;text-align:center" class="fade-in">
+          <div style="width:48px;height:48px;border-radius:10px;background:rgba(0,229,255,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:20px;font-weight:700;color:var(--cyan);margin-bottom:4px">MCP</div>
+          <div style="font-size:12px;color:var(--text-dim);font-family:var(--font-mono);margin-bottom:12px">Model Context Protocol</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text-primary);margin-bottom:8px">AI 的"手脚"</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.6">让 AI 能连接真实系统——<strong style="color:var(--cyan)">控制浏览器</strong>（注入代码、读日志、点击页面）、读写文件、执行脚本。没有 MCP，AI 只能输出文字，什么都做不了。</div>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:24px;text-align:center" class="fade-in" style="animation-delay:0.1s">
+          <div style="width:48px;height:48px;border-radius:10px;background:rgba(0,255,148,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:20px;font-weight:700;color:var(--green);margin-bottom:4px">Skill</div>
+          <div style="font-size:12px;color:var(--text-dim);font-family:var(--font-mono);margin-bottom:12px">可复用工作流模板</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text-primary);margin-bottom:8px">AI 的"SOP 手册"</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.6">把专业领域的方法论<strong style="color:var(--green)">固化成模板</strong>——定义流程步骤、调度规则、验收标准。一次编写，所有同类任务都能复用。你正在看的这个逆向系统就是一个 Skill。</div>
+        </div>
+        <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:24px;text-align:center" class="fade-in" style="animation-delay:0.2s">
+          <div style="width:48px;height:48px;border-radius:10px;background:rgba(255,107,53,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 14px">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <div style="font-family:var(--font-mono);font-size:20px;font-weight:700;color:var(--orange);margin-bottom:4px">Agent</div>
+          <div style="font-size:12px;color:var(--text-dim);font-family:var(--font-mono);margin-bottom:12px">专业化角色分工</div>
+          <div style="font-size:14px;font-weight:600;color:var(--text-primary);margin-bottom:8px">AI 的"专家团队"</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.6">每个 Agent 扮演一个专业角色，有独立的<strong style="color:var(--orange)">职责边界和验证逻辑</strong>。分析者和验证者分离，确保结论经过交叉检验而非一家之言。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Tab 5: Protocol ===== -->
+<section class="tab-panel" id="panel-4">
+  <div class="wrap">
+    <div class="section-label">PROTOCOL // 协作规范</div>
+    <h2 style="font-size:28px;font-weight:700;margin-bottom:12px;">它们怎么配合？</h2>
+    <p style="color:var(--text-secondary);margin-bottom:40px;font-size:15px;max-width:680px;">8 个 Agent 像团队里的 8 个专家，它们之间<strong style="color:var(--cyan)">不需要开会</strong>，靠 4 套"制度"来协调——谁该做什么、做完怎么交、结果放哪，都有明确规范。</p>
+
+    <div class="grid-2" style="gap:20px;margin-bottom:40px;">
+
+      <!-- Card 1: Knowledge Graph -->
+      <div class="card fade-in">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:8px;background:rgba(0,229,255,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/><line x1="9" y1="10" x2="7.5" y2="7.5"/><line x1="15" y1="10" x2="16.5" y2="7.5"/><line x1="9" y1="14" x2="7.5" y2="16.5"/><line x1="15" y1="14" x2="16.5" y2="16.5"/></svg>
+          </div>
+          <div>
+            <div style="font-size:16px;font-weight:600;color:var(--cyan)">知识图谱</div>
+            <div style="font-size:12px;color:var(--text-dim);font-family:var(--font-mono)">Knowledge Graph</div>
+          </div>
+        </div>
+        <div style="font-size:14px;color:var(--text-secondary);line-height:1.8;margin-bottom:12px">
+          <strong style="color:var(--text-primary)">类比：共享作战地图</strong><br>
+          所有 Agent 共享同一张"地图"——记录已知结论、证据、待解决问题。只有指挥官（PM）有权限更新地图，其他 Agent 只能读取。
+        </div>
+        <div style="background:var(--bg-deep);border-radius:6px;padding:14px;font-size:13px;color:var(--text-dim);line-height:1.7;font-family:var(--font-mono)">
+          <span style="color:var(--cyan)">claims</span> 结论主张（已验证 / 待验证 / 已推翻）<br>
+          <span style="color:var(--green)">evidence</span> 支撑证据（工具 + 数据来源）<br>
+          <span style="color:var(--orange)">agent_history</span> 执行记录（谁做了什么、何时）<br>
+          <span style="color:var(--purple)">classification</span> 分析分类（黑盒类型、推荐策略）
+        </div>
+      </div>
+
+      <!-- Card 2: pm_instruction -->
+      <div class="card fade-in" style="animation-delay:0.1s">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:8px;background:rgba(255,214,0,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--yellow)" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <div>
+            <div style="font-size:16px;font-weight:600;color:var(--yellow)">任务指令单</div>
+            <div style="font-size:12px;color:var(--text-dim);font-family:var(--font-mono)">pm_instruction</div>
+          </div>
+        </div>
+        <div style="font-size:14px;color:var(--text-secondary);line-height:1.8;margin-bottom:12px">
+          <strong style="color:var(--text-primary)">类比：PM 给每个专家发的任务单</strong><br>
+          每轮开始，指挥官给目标 Agent 发一份指令单——"这轮你要做什么、上下文是什么、做完产出什么文件"。Agent 只做指令单里要求的事。
+        </div>
+        <div style="background:var(--bg-deep);border-radius:6px;padding:14px;font-size:13px;color:var(--text-dim);line-height:1.7;font-family:var(--font-mono)">
+          <span style="color:var(--yellow)">goal</span> 本轮具体目标<br>
+          <span style="color:var(--yellow)">round</span> 当前轮次编号<br>
+          <span style="color:var(--yellow)">previous_summary</span> 上一轮摘要<br>
+          <span style="color:var(--yellow)">expected_outputs</span> 预期产出文件清单<br>
+          <span style="color:var(--yellow)">forced_actions</span> 必须执行的动作
+        </div>
+      </div>
+
+      <!-- Card 3: Summary File -->
+      <div class="card fade-in" style="animation-delay:0.2s">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:8px;background:rgba(0,255,148,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M9 12l2 2 4-4"/><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+          </div>
+          <div>
+            <div style="font-size:16px;font-weight:600;color:var(--green)">工作报告</div>
+            <div style="font-size:12px;color:var(--text-dim);font-family:var(--font-mono)">Summary File</div>
+          </div>
+        </div>
+        <div style="font-size:14px;color:var(--text-secondary);line-height:1.8;margin-bottom:12px">
+          <strong style="color:var(--text-primary)">类比：专家完成后的汇报模板</strong><br>
+          每个 Agent 做完后，必须写一份固定格式的报告。不允许口头汇报，<strong style="color:var(--green)">必须写到文件</strong>。PM 阅读报告来决定下一步调度谁。
+        </div>
+        <div style="background:var(--bg-deep);border-radius:6px;padding:14px;font-size:13px;color:var(--text-dim);line-height:1.7;font-family:var(--font-mono)">
+          1. <span style="color:var(--green)">本轮目标</span> — 指令单的 goal<br>
+          2. <span style="color:var(--green)">执行步骤</span> — 按时间记录工具调用<br>
+          3. <span style="color:var(--green)">推理过程</span> — 观察 &rarr; 推导 &rarr; 排除 &rarr; 结论<br>
+          4. <span style="color:var(--green)">关键证据</span> — 原始数据 + 来源标注<br>
+          5. <span style="color:var(--green)">验收判定</span> — 标准对比实际结果<br>
+          6. <span style="color:var(--green)">产出文件</span> — 生成的文件列表<br>
+          7. <span style="color:var(--green)">下一步建议</span> — 建议 + 理由 + 风险
+        </div>
+      </div>
+
+      <!-- Card 4: File System -->
+      <div class="card fade-in" style="animation-delay:0.3s">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+          <div style="width:40px;height:40px;border-radius:8px;background:rgba(255,107,53,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+          </div>
+          <div>
+            <div style="font-size:16px;font-weight:600;color:var(--orange)">文件系统</div>
+            <div style="font-size:12px;color:var(--text-dim);font-family:var(--font-mono)">Workspace</div>
+          </div>
+        </div>
+        <div style="font-size:14px;color:var(--text-secondary);line-height:1.8;margin-bottom:12px">
+          <strong style="color:var(--text-primary)">类比：共享项目文件夹</strong><br>
+          Agent 之间<strong style="color:var(--orange)">不直接对话</strong>，全部通过文件系统传递信息。每个目录有严格的读写权限——谁可以放什么文件，有明确规定。
+        </div>
+        <div style="background:var(--bg-deep);border-radius:6px;padding:14px;font-size:13px;color:var(--text-dim);line-height:1.7;font-family:var(--font-mono)">
+          workspace/<span style="color:var(--cyan)">project</span>/<span style="color:var(--cyan)">task</span>/<br>
+          &nbsp;&nbsp;<span style="color:var(--red)">input/</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;原始JS源码（<span style="color:var(--red)">禁止写入</span>）<br>
+          &nbsp;&nbsp;<span style="color:var(--green)">output/</span> &nbsp;&nbsp;&nbsp;&nbsp;分析结果、验证脚本（<span style="color:var(--green)">所有Agent</span>）<br>
+          &nbsp;&nbsp;<span style="color:var(--orange)">overrides/</span> &nbsp;注入文件（<span style="color:var(--orange)">仅Injector</span>）<br>
+          &nbsp;&nbsp;<span style="color:var(--cyan)">KG.yaml</span> &nbsp;&nbsp;&nbsp;知识图谱（<span style="color:var(--cyan)">仅PM</span>）
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Collaboration cycle diagram -->
+    <div class="section-label" style="margin-top:16px">LIFECYCLE // 协作循环</div>
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:32px;text-align:center;margin-bottom:32px" class="fade-in">
+      <div style="display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;font-size:14px;line-height:2">
+        <span style="padding:6px 14px;border-radius:6px;background:rgba(0,229,255,0.1);border:1px solid rgba(0,229,255,0.2);color:var(--cyan);font-weight:600">PM 更新知识图谱</span>
+        <span style="color:var(--text-dim)">&rarr;</span>
+        <span style="padding:6px 14px;border-radius:6px;background:rgba(255,214,0,0.1);border:1px solid rgba(255,214,0,0.2);color:var(--yellow);font-weight:600">PM 发任务指令单</span>
+        <span style="color:var(--text-dim)">&rarr;</span>
+        <span style="padding:6px 14px;border-radius:6px;background:rgba(0,255,148,0.1);border:1px solid rgba(0,255,148,0.2);color:var(--green);font-weight:600">Agent 执行任务</span>
+        <span style="color:var(--text-dim)">&rarr;</span>
+        <span style="padding:6px 14px;border-radius:6px;background:rgba(0,255,148,0.1);border:1px solid rgba(0,255,148,0.2);color:var(--green);font-weight:600">Agent 写工作报告</span>
+        <span style="color:var(--text-dim)">&rarr;</span>
+        <span style="padding:6px 14px;border-radius:6px;background:rgba(0,229,255,0.1);border:1px solid rgba(0,229,255,0.2);color:var(--cyan);font-weight:600">PM 读报告，决定下一步</span>
+        <span style="color:var(--text-dim)">&rarr; <span style="color:var(--text-dim);font-size:12px;font-family:var(--font-mono)">循环...</span></span>
+      </div>
+      <p style="margin-top:16px;font-size:13px;color:var(--text-dim)">整个逆向过程就是这 5 步的循环——直到知识图谱中所有结论都被验证，达到目标等级</p>
+    </div>
+
+    <!-- Key rules -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px" class="fade-in">
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:20px;text-align:center">
+        <div style="font-size:28px;margin-bottom:8px">&#128274;</div>
+        <div style="font-size:14px;font-weight:600;margin-bottom:6px;color:var(--text-primary)">权限隔离</div>
+        <div style="font-size:12px;color:var(--text-dim);line-height:1.6">每个 Agent 只能写自己负责的目录。Injector 不能动 input，Analyzer 不能动 overrides</div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:20px;text-align:center">
+        <div style="font-size:28px;margin-bottom:8px">&#128196;</div>
+        <div style="font-size:14px;font-weight:600;margin-bottom:6px;color:var(--text-primary)">文件即通信</div>
+        <div style="font-size:12px;color:var(--text-dim);line-height:1.6">Agent 之间不对话、不传消息。所有信息交换通过读写文件完成——可追溯、可审计</div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:20px;text-align:center">
+        <div style="font-size:28px;margin-bottom:8px">&#128272;</div>
+        <div style="font-size:14px;font-weight:600;margin-bottom:6px;color:var(--text-primary)">统一日志规范</div>
+        <div style="font-size:12px;color:var(--text-dim);line-height:1.6">注入代码使用统一的 Key 体系和数据格式，确保任何 Agent 都能正确解读采集到的日志</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Tab 6: Case Study ===== -->
+<section class="tab-panel" id="panel-5">
+  <div class="wrap">
+    <div class="section-label">CASE STUDY // 真实案例</div>
+    <div class="case-header">
+      <h2 class="case-title">京东 JD h5st 签名逆向</h2>
+      <p class="case-subtitle">破解一个 10 段加密签名算法——自动完成，无人干预</p>
+      <div class="case-badges">
+        <span class="case-badge">h5st 5.3</span>
+        <span class="case-badge">241KB 混淆 JS</span>
+        <span class="case-badge" style="border-color:rgba(255,214,0,0.3);color:var(--yellow)">Level A+</span>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="timeline fade-in">
+      <div class="tl-item">
+        <div class="tl-dot" style="border-color:var(--cyan)"></div>
+        <div class="tl-round">R1</div>
+        <div class="tl-title">启动</div>
+        <div class="tl-desc">目标：逆向 h5st 签名——附加在 JD API 请求上的 10 段加密字符串</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="border-color:var(--green)"></div>
+        <div class="tl-round">R4-R10</div>
+        <div class="tl-title">突破</div>
+        <div class="tl-desc">侦察兵植入监听器，密码学家追踪调用链，10 轮内定位核心算法</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="border-color:var(--orange)"></div>
+        <div class="tl-round">R12-R32</div>
+        <div class="tl-title">深化</div>
+        <div class="tl-desc">参数分类、发现上游依赖、开始构建客户端</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="border-color:var(--red)"></div>
+        <div class="tl-round">R38-R78</div>
+        <div class="tl-title">VM 攻坚</div>
+        <div class="tl-desc">发现 5 个虚拟机字节码黑盒，三路验证逐个击破</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot" style="border-color:var(--yellow)"></div>
+        <div class="tl-round">R82-R85</div>
+        <div class="tl-title">完成</div>
+        <div class="tl-desc">全部验证通过，Level A+ 确认，完整文档收尾</div>
+      </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard-grid fade-in">
+      <div class="metric-card">
+        <div class="metric-ring ring-cyan"><span>86%</span></div>
+        <div class="metric-info">
+          <div class="metric-value">85 轮</div>
+          <div class="metric-label">总执行轮次</div>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-ring ring-green"><span>50/0</span></div>
+        <div class="metric-info">
+          <div class="metric-value">50 / 0 / 3</div>
+          <div class="metric-label">验证 PASS / FAIL / SKIP</div>
+        </div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-ring ring-gold"><span>A+</span></div>
+        <div class="metric-info">
+          <div class="metric-value">Level A+</div>
+          <div class="metric-label">客户端集成验证通过</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Level Ladder -->
+    <div class="section-label" style="margin-top:32px">LEVEL SYSTEM // 完成等级体系</div>
+    <p style="color:var(--text-secondary);margin-bottom:20px;font-size:14px">AI 不说"做完了"就完事——它给自己打分。每个等级有严格的量化标准，<strong style="color:var(--cyan)">不可降级</strong>。JD 案例最终达到最高等级 A+。</p>
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:28px;margin-bottom:32px" class="fade-in">
+      <!-- Ladder visualization -->
+      <div style="display:flex;align-items:flex-end;gap:12px;margin-bottom:24px;padding:0 20px">
+        <div style="flex:1;text-align:center">
+          <div style="height:48px;border-radius:6px 6px 0 0;background:rgba(232,244,253,0.06);border:1px solid rgba(232,244,253,0.1);border-bottom:none;display:flex;align-items:center;justify-content:center;padding:8px">
+            <span style="font-family:var(--font-mono);font-size:14px;font-weight:700;color:var(--text-dim)">D</span>
+          </div>
+          <div style="padding:8px 4px;font-size:11px;color:var(--text-dim);line-height:1.4">未达 A/B/C<br>仅记录已知部分</div>
+        </div>
+        <div style="flex:1;text-align:center">
+          <div style="height:72px;border-radius:6px 6px 0 0;background:rgba(155,89,182,0.08);border:1px solid rgba(155,89,182,0.2);border-bottom:none;display:flex;align-items:center;justify-content:center;padding:8px">
+            <span style="font-family:var(--font-mono);font-size:16px;font-weight:700;color:var(--purple)">C</span>
+          </div>
+          <div style="padding:8px 4px;font-size:11px;color:var(--text-dim);line-height:1.4">浏览器远程调用<br>AI 借用浏览器算</div>
+        </div>
+        <div style="flex:1;text-align:center">
+          <div style="height:96px;border-radius:6px 6px 0 0;background:rgba(0,229,255,0.06);border:1px solid rgba(0,229,255,0.15);border-bottom:none;display:flex;align-items:center;justify-content:center;padding:8px">
+            <span style="font-family:var(--font-mono);font-size:18px;font-weight:700;color:var(--cyan)">B</span>
+          </div>
+          <div style="padding:8px 4px;font-size:11px;color:var(--text-dim);line-height:1.4">Node.js 运行<br>需要环境补丁辅助</div>
+        </div>
+        <div style="flex:1;text-align:center">
+          <div style="height:120px;border-radius:6px 6px 0 0;background:rgba(0,255,148,0.06);border:1px solid rgba(0,255,148,0.2);border-bottom:none;display:flex;align-items:center;justify-content:center;padding:8px;position:relative">
+            <span style="font-family:var(--font-mono);font-size:20px;font-weight:700;color:var(--green)">A</span>
+          </div>
+          <div style="padding:8px 4px;font-size:11px;color:var(--text-dim);line-height:1.4">脱浏览器独立运行<br>逐字符匹配 &ge;3 组</div>
+        </div>
+        <div style="flex:1;text-align:center">
+          <div style="height:144px;border-radius:6px 6px 0 0;background:rgba(255,214,0,0.06);border:1px solid rgba(255,214,0,0.25);border-bottom:none;display:flex;align-items:center;justify-content:center;padding:8px;position:relative;box-shadow:0 0 16px rgba(255,214,0,0.08)">
+            <span style="font-family:var(--font-mono);font-size:22px;font-weight:700;color:var(--yellow)">A+</span>
+            <span style="position:absolute;top:6px;right:6px;font-size:9px;padding:1px 5px;border-radius:3px;background:var(--yellow);color:var(--bg-deep);font-weight:700">JD</span>
+          </div>
+          <div style="padding:8px 4px;font-size:11px;color:var(--yellow);line-height:1.4;font-weight:500">客户端独立运行<br>发真实请求验证通过</div>
+        </div>
+      </div>
+      <div style="text-align:center;font-size:12px;color:var(--text-dim);font-family:var(--font-mono)">
+        等级只升不降 &mdash; 每个等级都有对应的<strong style="color:var(--text-secondary)">验证脚本 + 结构化日志</strong>，机器核对通过才算
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:32px">DELIVERABLES // 交付物</div>
+    <div class="artifact-grid fade-in">
+      <div class="artifact-card">
+        <div class="artifact-name">h5st_sign.js</div>
+        <div class="artifact-desc">完整签名模块（双路径密钥派生 + 10 段拼接）</div>
+      </div>
+      <div class="artifact-card">
+        <div class="artifact-name">jd_crypto.js</div>
+        <div class="artifact-desc">JD 自定义 CryptoJS 提取模块</div>
+      </div>
+      <div class="artifact-card">
+        <div class="artifact-name">api_client.js</div>
+        <div class="artifact-desc">完整 API 客户端（初始化 + 签名 + 发请求）</div>
+      </div>
+      <div class="artifact-card">
+        <div class="artifact-name">tool.js</div>
+        <div class="artifact-desc">解码/编码工具（字段级读写）</div>
+      </div>
+      <div class="artifact-card">
+        <div class="artifact-name">verify_detached.js</div>
+        <div class="artifact-desc">Level A 验证脚本（50 PASS / 0 FAIL）</div>
+      </div>
+      <div class="artifact-card">
+        <div class="artifact-name">test_datasets.json</div>
+        <div class="artifact-desc">6 组测试数据（含中间值 pinning）</div>
+      </div>
+      <div class="artifact-card">
+        <div class="artifact-name">params_map.json</div>
+        <div class="artifact-desc">29 个参数完整分类（5 类）</div>
+      </div>
+      <div class="artifact-card">
+        <div class="artifact-name">knowledge_graph.yaml</div>
+        <div class="artifact-desc">完整分析图谱（35 主张 + 210+ 证据）</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Tab 7: Highlights ===== -->
+<section class="tab-panel" id="panel-6">
+  <div class="wrap">
+    <div class="section-label">HIGHLIGHTS // 核心亮点</div>
+    <h2 style="font-size:28px;font-weight:700;margin-bottom:36px;">为什么这套系统令人震撼？</h2>
+    <div class="highlight-grid">
+
+      <div class="highlight-card fade-in">
+        <div class="hl-icon" style="background:rgba(0,229,255,0.08)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round"><polyline points="23,4 23,10 17,10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+        </div>
+        <div class="hl-content">
+          <div class="hl-title" style="color:var(--cyan)">自验证闭环</div>
+          <div class="hl-analogy">像学术论文的同行评审——但更严格。密码学家写论文，质检员复核，然后专门的"魔鬼代言人"会主动试图推翻结论。三者都通过，结论才被接受。</div>
+          <div class="hl-evidence">JD: 触发 3 次矛盾闸门，每次正确降级并恢复</div>
+        </div>
+      </div>
+
+      <div class="highlight-card fade-in" style="animation-delay:0.1s">
+        <div class="hl-icon" style="background:rgba(0,255,148,0.08)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><circle cx="6" cy="6" r="2"/><circle cx="18" cy="6" r="2"/><circle cx="6" cy="18" r="2"/><circle cx="18" cy="18" r="2"/><line x1="9" y1="10" x2="7.5" y2="7.5"/><line x1="15" y1="10" x2="16.5" y2="7.5"/><line x1="9" y1="14" x2="7.5" y2="16.5"/><line x1="15" y1="14" x2="16.5" y2="16.5"/></svg>
+        </div>
+        <div class="hl-content">
+          <div class="hl-title" style="color:var(--green)">知识图谱自动积累</div>
+          <div class="hl-analogy">一个自动生长的"作战地图"。每一轮分析都往地图上添加新发现、修正旧假设、标注哪些路走不通。所有 Agent 共享同一张地图。</div>
+          <div class="hl-evidence">JD: 35 个结论主张，210+ 条独立证据，434KB 知识图谱</div>
+        </div>
+      </div>
+
+      <div class="highlight-card fade-in" style="animation-delay:0.2s">
+        <div class="hl-icon" style="background:rgba(255,107,53,0.08)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round"><rect x="2" y="6" width="20" height="12" rx="2"/><rect x="6" y="2" width="12" height="4" rx="1"/><rect x="10" y="10" width="4" height="4" rx="1"/></svg>
+        </div>
+        <div class="hl-content">
+          <div class="hl-title" style="color:var(--orange)">递归拆解</div>
+          <div class="hl-analogy">像拆俄罗斯套娃——当你破解了一个锁，发现钥匙本身也被锁住了。系统会自动把那个新锁作为新的逆向目标，继续破解。</div>
+          <div class="hl-evidence">JD: 发现 TDEncrypt 加密的上游 token 源，自动作为子目标处理，R22 达到 Level A</div>
+        </div>
+      </div>
+
+      <div class="highlight-card fade-in" style="animation-delay:0.3s">
+        <div class="hl-icon" style="background:rgba(255,214,0,0.08)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--yellow)" stroke-width="2" stroke-linecap="round"><path d="M2 20h20"/><path d="M4 16l4-4 4 4 4-8 4 8"/></svg>
+        </div>
+        <div class="hl-content">
+          <div class="hl-title" style="color:var(--yellow)">诚实分级</div>
+          <div class="hl-analogy">AI 不说"我做到了"就完事——它给自己打分：A+ = 独立客户端验证通过，A = 算法复现成功，B/C/D = 还需要越来越多人帮助。</div>
+          <div class="hl-evidence">JD: 主动识别出 5 个 VM 字节码差距阻止了真正 Level A，花 40 轮逐个关闭</div>
+        </div>
+      </div>
+
+      <div class="highlight-card full-width fade-in" style="animation-delay:0.4s">
+        <div class="hl-icon" style="background:rgba(0,229,255,0.08)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
+        </div>
+        <div class="hl-content">
+          <div class="hl-title" style="color:var(--cyan)">端到端自动化</div>
+          <div class="hl-analogy">从"帮我分析这个目标"到"这是一个能独立工作的 API 客户端"——全程无需人工干预。人只需要启动任务和审查最终结果。</div>
+          <div class="hl-evidence">JD: 1 次人工启动，85 轮自动运行，输出可独立生成签名并发送真实请求的 API 客户端</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===== Tab 8: Summary ===== -->
+<section class="tab-panel" id="panel-7">
+  <div class="wrap summary-section">
+    <div class="section-label" style="justify-content:center">SUMMARY // 总结</div>
+
+    <!-- Recap -->
+    <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:24px 28px;margin-bottom:40px;text-align:center" class="fade-in">
+      <div style="font-size:13px;color:var(--text-dim);font-family:var(--font-mono);letter-spacing:0.08em;margin-bottom:12px">你刚看到了什么</div>
+      <div style="font-size:15px;color:var(--text-secondary);line-height:1.8">
+        一个 <strong style="color:var(--cyan)">241KB 的混淆 JS 文件</strong>——经过代码混淆、自定义虚拟机、多层加密嵌套、反调试层层防护——<br>
+        8 个 AI Agent 通过 <strong style="color:var(--green)">85 轮自动协作</strong>，产出了一个<strong style="color:var(--yellow)">可独立运行的 API 客户端</strong>，验证结果 <strong style="color:var(--green)">50 通过 / 0 失败</strong>。<br>
+        这相当于资深工程师 <strong style="color:var(--cyan)">2 周以上</strong> 的工作量——全程自动推进，无需人工干预。<span style="font-size:12px;color:var(--text-dim)">（当前阶段偶尔需人工介入优化流程，目标是完全自主运行）</span>
+      </div>
+    </div>
+
+    <!-- Quote -->
+    <div class="summary-quote fade-in">
+      "真正有价值的不是 <em>'AI 帮我写了一行代码'</em>——<br>
+      而是 <em>'AI 按照我们的流程把工作推到了可交付的状态'</em>"
+    </div>
+
+    <!-- Core Shift -->
+    <div class="section-label" style="justify-content:center;margin-top:12px">SHIFT // 核心转变</div>
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:center;margin-bottom:48px" class="fade-in">
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:24px;text-align:center">
+        <div style="font-size:13px;color:var(--text-dim);font-family:var(--font-mono);margin-bottom:10px">BEFORE</div>
+        <div style="font-size:16px;font-weight:600;color:var(--text-secondary);margin-bottom:10px">人是执行者</div>
+        <div style="font-size:13px;color:var(--text-dim);line-height:1.7">
+          写代码、查 bug、做测试、写文档<br>
+          每个环节亲力亲为<br>
+          <strong style="color:var(--text-secondary)">AI 是辅助工具</strong>——帮我查个 API、写个函数
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:center;gap:4px">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12,5 19,12 12,19"/></svg>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid rgba(0,229,255,0.2);border-radius:10px;padding:24px;text-align:center;box-shadow:0 0 20px rgba(0,229,255,0.05)">
+        <div style="font-size:13px;color:var(--cyan-dim);font-family:var(--font-mono);margin-bottom:10px">AFTER</div>
+        <div style="font-size:16px;font-weight:600;color:var(--cyan);margin-bottom:10px">人是设计者 + 审核者</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.7">
+          设计流程、定义规则、审核结果<br>
+          把专业经验封装成 AI 可执行的 SOP<br>
+          <strong style="color:var(--cyan)">AI 是执行引擎</strong>——按照你的流程把事做完
+        </div>
+      </div>
+    </div>
+
+    <!-- Department Scenarios -->
+    <div class="section-label" style="justify-content:center;margin-top:16px">SCENARIOS // 各部门可以这样开始</div>
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-bottom:48px" class="fade-in">
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:18px 14px;text-align:center">
+        <div style="width:36px;height:36px;border-radius:8px;background:rgba(0,229,255,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 10px">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round"><polyline points="16,18 22,12 16,6"/><polyline points="8,6 2,12 8,18"/></svg>
+        </div>
+        <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--cyan)">Java 开发</h4>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.6;margin-bottom:8px">线上报警了，Agent 自动拉取异常堆栈，关联最近的代码变更，分析日志定位根因</div>
+        <div style="font-size:11px;padding:3px 8px;border-radius:3px;background:rgba(0,229,255,0.05);color:var(--text-dim);font-family:var(--font-mono);display:inline-block">排障 SOP Agent</div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:18px 14px;text-align:center">
+        <div style="width:36px;height:36px;border-radius:8px;background:rgba(0,255,148,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 10px">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+        </div>
+        <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--green)">ETL 开发</h4>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.6;margin-bottom:8px">跑批完成后，Agent 自动检查数据量波动、字段异常、空值率，生成质量报告和修复建议</div>
+        <div style="font-size:11px;padding:3px 8px;border-radius:3px;background:rgba(0,255,148,0.05);color:var(--text-dim);font-family:var(--font-mono);display:inline-block">数据质量 Agent</div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:18px 14px;text-align:center">
+        <div style="width:36px;height:36px;border-radius:8px;background:rgba(255,107,53,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 10px">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2" stroke-linecap="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+        </div>
+        <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--orange)">产品经理</h4>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.6;margin-bottom:8px">写完 PRD，Agent 自动拆解用户故事、检查逻辑漏洞、生成验收标准和测试用例</div>
+        <div style="font-size:11px;padding:3px 8px;border-radius:3px;background:rgba(255,107,53,0.05);color:var(--text-dim);font-family:var(--font-mono);display:inline-block">需求分析 Agent</div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:18px 14px;text-align:center">
+        <div style="width:36px;height:36px;border-radius:8px;background:rgba(155,89,182,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 10px">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--purple)" stroke-width="2" stroke-linecap="round"><path d="M9 12l2 2 4-4"/><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+        </div>
+        <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--purple)">测试</h4>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.6;margin-bottom:8px">拿到需求文档后，Agent 自动生成覆盖正常路径 + 边界条件的测试用例，一键执行</div>
+        <div style="font-size:11px;padding:3px 8px;border-radius:3px;background:rgba(155,89,182,0.05);color:var(--text-dim);font-family:var(--font-mono);display:inline-block">自动化测试 Agent</div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:18px 14px;text-align:center">
+        <div style="width:36px;height:36px;border-radius:8px;background:rgba(255,56,96,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 10px">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        </div>
+        <h4 style="font-size:14px;font-weight:600;margin-bottom:8px;color:var(--red)">运维</h4>
+        <div style="font-size:12px;color:var(--text-secondary);line-height:1.6;margin-bottom:8px">凌晨告警，Agent 自动关联最近变更、分析日志、定位故障组件、执行预定义修复预案</div>
+        <div style="font-size:11px;padding:3px 8px;border-radius:3px;background:rgba(255,56,96,0.05);color:var(--text-dim);font-family:var(--font-mono);display:inline-block">事件响应 Agent</div>
+      </div>
+    </div>
+
+    <!-- Action Path -->
+    <div class="section-label" style="justify-content:center;margin-top:16px">GET STARTED // 如何开始？</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:48px" class="fade-in">
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:24px;text-align:center;position:relative">
+        <div style="width:36px;height:36px;border-radius:50%;background:rgba(0,229,255,0.1);border:1px solid var(--cyan-dim);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-family:var(--font-mono);font-size:16px;font-weight:700;color:var(--cyan)">1</div>
+        <div style="font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text-primary)">找任务</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.7">
+          在自己的工作中找一个<strong style="color:var(--text-primary)">重复性高、步骤固定</strong>的任务——每次做都要走一样的流程、查一样的资料、写一样的文档。
+        </div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:24px;text-align:center;position:relative">
+        <div style="width:36px;height:36px;border-radius:50%;background:rgba(0,255,148,0.1);border:1px solid var(--green-dim);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-family:var(--font-mono);font-size:16px;font-weight:700;color:var(--green)">2</div>
+        <div style="font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text-primary)">拆 SOP</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.7">
+          把这个任务<strong style="color:var(--text-primary)">拆解成清晰的步骤</strong>：每一步做什么、输入什么、输出什么、怎么判断做对了。写成文档——这就是你给 AI 的工作说明书。
+        </div>
+      </div>
+      <div style="background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:24px;text-align:center;position:relative">
+        <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,107,53,0.1);border:1px solid var(--orange-dim);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-family:var(--font-mono);font-size:16px;font-weight:700;color:var(--orange)">3</div>
+        <div style="font-size:15px;font-weight:600;margin-bottom:8px;color:var(--text-primary)">封装 Skill / Agent</div>
+        <div style="font-size:13px;color:var(--text-secondary);line-height:1.7">
+          把 SOP 配置成 <strong style="color:var(--green)">Skill</strong>（可复用的工作流模板）或 <strong style="color:var(--orange)">Agent</strong>（专职角色）。之后每次同类任务，<strong style="color:var(--cyan)">一条命令启动</strong>，AI 按你的流程执行。
+        </div>
+      </div>
+    </div>
+
+    <!-- Closing -->
+    <div style="text-align:center;padding:32px 24px;background:linear-gradient(135deg,rgba(0,229,255,0.04),rgba(0,255,148,0.02));border:1px solid var(--border);border-radius:10px" class="fade-in">
+      <div style="font-size:20px;font-weight:600;color:var(--text-primary);margin-bottom:12px;line-height:1.6">
+        从 <span style="color:var(--text-secondary)">探索 AI</span> 到 <strong style="color:var(--cyan)">系统性运用</strong>
+      </div>
+      <div style="font-size:15px;color:var(--text-secondary);line-height:1.7;max-width:600px;margin:0 auto">
+        不需要等 AI 变得完美，也不需要学会写代码。<br>
+        你最擅长的事情是<strong style="color:var(--text-primary)">理解业务、定义流程、判断结果</strong>——<br>
+        把这些经验交给 AI 去执行，这就是 <strong style="color:var(--cyan)">MCP + Skill + Agent</strong> 的意义。
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+/* ===== Tab Navigation ===== */
+const tabBtns = document.querySelectorAll('.tab-btn');
+const panels = document.querySelectorAll('.tab-panel');
+let currentTab = 0;
+let heroAnimated = false;
+
+function switchTab(idx) {
+  if (idx < 0 || idx >= panels.length) return;
+  tabBtns.forEach(b => b.classList.remove('active'));
+  panels.forEach(p => p.classList.remove('active'));
+  tabBtns[idx].classList.add('active');
+  panels[idx].classList.add('active');
+  currentTab = idx;
+
+  /* Trigger animations per tab */
+  if (idx === 0 && !heroAnimated) {
+    setTimeout(animateHero, 300);
+    heroAnimated = true;
+  }
+  if (idx === 3) {
+    flowAnimator.autoPlayOnce();
+  }
+
+  /* Fade-in elements */
+  const fades = panels[idx].querySelectorAll('.fade-in');
+  fades.forEach((el, i) => {
+    setTimeout(() => el.classList.add('visible'), 100 + i * 80);
+  });
+}
+
+tabBtns.forEach((btn, i) => {
+  btn.addEventListener('click', () => switchTab(i));
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') switchTab(currentTab + 1);
+  if (e.key === 'ArrowLeft') switchTab(currentTab - 1);
+});
+
+/* ===== Particle Background ===== */
+const canvas = document.getElementById('particle-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let particleAnimId = null;
+
+function initParticles() {
+  canvas.width = canvas.parentElement.offsetWidth;
+  canvas.height = canvas.parentElement.offsetHeight;
+  particles = [];
+  const count = Math.min(80, Math.floor(canvas.width * canvas.height / 15000));
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
+      r: Math.random() * 1.5 + 1
+    });
+  }
+}
+
+function drawParticles() {
+  ctx.fillStyle = 'rgba(4,11,20,0.15)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  for (let i = 0; i < particles.length; i++) {
+    const p = particles[i];
+    p.x += p.vx;
+    p.y += p.vy;
+    if (p.x < 0) p.x = canvas.width;
+    if (p.x > canvas.width) p.x = 0;
+    if (p.y < 0) p.y = canvas.height;
+    if (p.y > canvas.height) p.y = 0;
+
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(0,229,255,0.5)';
+    ctx.fill();
+
+    for (let j = i + 1; j < particles.length; j++) {
+      const q = particles[j];
+      const dx = p.x - q.x, dy = p.y - q.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < 140) {
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(q.x, q.y);
+        ctx.strokeStyle = 'rgba(0,229,255,' + (0.1 * (1 - dist / 140)).toFixed(3) + ')';
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+  particleAnimId = requestAnimationFrame(drawParticles);
+}
+
+initParticles();
+drawParticles();
+
+/* ===== Hero Counter Animation ===== */
+function animateCounter(el, target, duration, suffix) {
+  suffix = suffix || '';
+  const start = performance.now();
+  function update(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(target * eased) + suffix;
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+function animateHero() {
+  const statNum = document.querySelector('.stat-card.cyan .stat-number');
+  animateCounter(statNum, 85, 1500, ' 轮');
+
+  const statVerify = document.getElementById('stat-verify');
+  const dur = 1200;
+  const start = performance.now();
+  function updateVerify(now) {
+    const p = Math.min((now - start) / dur, 1);
+    const e = 1 - Math.pow(1 - p, 3);
+    const pass = Math.round(50 * e);
+    const fail = Math.round(0 * e);
+    const skip = Math.round(3 * e);
+    statVerify.textContent = pass + ' / ' + fail + ' / ' + skip;
+    if (p < 1) requestAnimationFrame(updateVerify);
+  }
+  requestAnimationFrame(updateVerify);
+
+  const statLevel = document.getElementById('stat-level');
+  setTimeout(() => { statLevel.textContent = 'A+'; }, 800);
+}
+
+/* ===== Flow Animation Controller ===== */
+const flowAnimator = {
+  timers: [],
+  isPlaying: false,
+  autoPlayed: false,
+
+  phases: [
+    { duration: 2000, nodes: ['fn-user'], connectors: [], gates: [],
+      text: 'Phase 1/7 — 用户输入逆向目标' },
+    { duration: 2500, nodes: ['fn-pm1'], connectors: ['fc-01'],
+      gates: [], text: 'Phase 2/7 — PM 指挥官拆解任务，分配给侦察兵' },
+    { duration: 2500, nodes: ['fn-injector'], connectors: ['fc-12'],
+      gates: [], text: 'Phase 3/7 — 侦察兵在代码中植入监听器，采集运行日志' },
+    { duration: 2500, nodes: ['fn-analyzer'], connectors: ['fc-23'],
+      gates: [], text: 'Phase 4/7 — 密码学家分析日志，追踪调用链，还原算法' },
+    { duration: 2500, nodes: ['fn-reviewer'], connectors: ['fc-34'],
+      gates: ['gate-reviewer'], text: 'Phase 5/7 — 质检员审核结论 [Reviewer Gate]' },
+    { duration: 3000,
+      nodes: ['fn-static', 'fn-runtime', 'fn-adversary'],
+      connectors: ['branch-left', 'branch-center', 'branch-right'],
+      gates: [], text: 'Phase 6/7 — 三路验证：审计员 + 实验员 + 魔鬼代言人' },
+    { duration: 3500, nodes: ['fn-pm2', 'fn-integrator'], connectors: ['fc-67'],
+      gates: ['gate-contradiction', 'gate-recursive'],
+      text: 'Phase 7/7 — PM 汇总 + 工程师集成实现 → Level A+' }
+  ],
+
+  reset() {
+    this.timers.forEach(t => clearTimeout(t));
+    this.timers = [];
+    this.isPlaying = false;
+    document.querySelectorAll('.flow-node').forEach(n => {
+      n.classList.remove('active', 'completed');
+    });
+    document.querySelectorAll('.flow-connector-line').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.branch-svg path').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.gate-label').forEach(g => g.classList.remove('visible'));
+    document.getElementById('fn-output').classList.remove('active');
+    document.getElementById('flow-phase-text').textContent = '';
+    document.getElementById('flow-play').classList.add('active-ctrl');
+    document.getElementById('flow-pause').classList.remove('active-ctrl');
+  },
+
+  play() {
+    if (this.isPlaying) return;
+    this.reset();
+    this.isPlaying = true;
+    document.getElementById('flow-play').classList.remove('active-ctrl');
+    document.getElementById('flow-pause').classList.add('active-ctrl');
+
+    let delay = 0;
+    const allActiveNodes = [];
+    const self = this;
+
+    this.phases.forEach((phase, pi) => {
+      /* Activate nodes */
+      this.timers.push(setTimeout(() => {
+        /* Mark previous nodes as completed */
+        allActiveNodes.forEach(nId => {
+          const el = document.getElementById(nId);
+          if (el) el.classList.add('completed');
+        });
+        allActiveNodes.length = 0;
+
+        phase.nodes.forEach(nId => {
+          const el = document.getElementById(nId);
+          if (el) {
+            el.classList.remove('completed');
+            el.classList.add('active');
+            allActiveNodes.push(nId);
+          }
+        });
+
+        /* Activate connectors */
+        phase.connectors.forEach(cId => {
+          const el = document.getElementById(cId);
+          if (el) el.classList.add('active');
+        });
+
+        /* Show gate labels */
+        phase.gates.forEach(gId => {
+          const el = document.getElementById(gId);
+          if (el) el.classList.add('visible');
+        });
+
+        /* Phase text */
+        document.getElementById('flow-phase-text').textContent = phase.text;
+      }, delay));
+
+      delay += phase.duration;
+    });
+
+    /* Final: Output node */
+    this.timers.push(setTimeout(() => {
+      allActiveNodes.forEach(nId => {
+        const el = document.getElementById(nId);
+        if (el) { el.classList.remove('active'); el.classList.add('completed'); }
+      });
+      const out = document.getElementById('fn-output');
+      out.classList.add('active');
+      out.style.opacity = '1';
+      out.style.borderColor = 'rgba(255,214,0,0.4)';
+      out.style.boxShadow = '0 0 24px rgba(255,214,0,0.15)';
+      document.getElementById('flow-phase-text').textContent = '全部完成 — Level A+ 客户端集成验证通过';
+      document.getElementById('fc-78').classList.add('active');
+
+      self.isPlaying = false;
+      document.getElementById('flow-pause').classList.remove('active-ctrl');
+      document.getElementById('flow-play').classList.add('active-ctrl');
+    }, delay));
+  },
+
+  pause() {
+    this.timers.forEach(t => clearTimeout(t));
+    this.timers = [];
+    this.isPlaying = false;
+    document.getElementById('flow-pause').classList.remove('active-ctrl');
+    document.getElementById('flow-play').classList.add('active-ctrl');
+  },
+
+  autoPlayOnce() {
+    if (!this.autoPlayed) {
+      this.autoPlayed = true;
+      setTimeout(() => this.play(), 500);
+    }
+  }
+};
+
+/* ===== Intersection Observer for fade-in ===== */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+/* ===== Init ===== */
+window.addEventListener('load', () => {
+  setTimeout(animateHero, 500);
+  heroAnimated = true;
+
+  /* Reveal black box on tab 2 hover */
+  const bb = document.getElementById('blackBox');
+  if (bb) {
+    let revealed = false;
+    setInterval(() => {
+      revealed = !revealed;
+      bb.classList.toggle('revealed', revealed);
+    }, 3000);
+  }
+});
+
+window.addEventListener('resize', () => {
+  initParticles();
+});
+</script>
+</body>
+</html>
