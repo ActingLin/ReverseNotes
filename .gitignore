@@ -1,2 +1,17 @@
 # 默认忽略的文件
-/.idea/
+
+# IDE files
+.idea/
+.vscode/
+__pycache__/
+.venv/
+.venv311
+# node 依赖目录
+node_modules/
+package-lock.json
+package.json
+
+# ai相关
+.claude/
+clauderc.json
+.map.json

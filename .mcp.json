@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "jadx-mcp-server": {
+      "command": "D:/AAA_ai/AAA_mcp/jadx/jadx-mcp-server-6.3.0/jadx-mcp-server/.venv/Scripts/python.exe",
+      "args": [
+        "D:/AAA_ai/AAA_mcp/jadx/jadx-mcp-server-6.3.0/jadx-mcp-server/jadx_mcp_server.py"
+      ]
+    },
+    "ida-pro-mcp": {
+      "command": "D:\\CTF\\Reverse\\IDA Professional 9.0\\python311\\python.exe",
+      "args": [
+        "D:\\CTF\\Reverse\\IDA Professional 9.0\\python311\\Lib\\site-packages\\ida_pro_mcp\\server.py"
+      ]
+    }
+  }
+}
