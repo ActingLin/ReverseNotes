@@ -21,7 +21,7 @@ def recognize_captcha(image_input):
         str: 识别出的文本
     """
     # 1. 创建ddddocr的实例
-    ocr = ddddocr.DdddOcr()
+    ocr = ddddocr.DdddOcr(show_ad=False)
 
     # 2. 判断输入类型并获取图片的二进制数据
     if isinstance(image_input, str):
