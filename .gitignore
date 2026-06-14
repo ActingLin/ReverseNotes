@@ -3,6 +3,8 @@
 # IDE files
 .idea/
 .vscode/
+
+# python相关
 __pycache__/
 .venv/
 .venv311
@@ -15,5 +17,7 @@ package.json
 # ai相关
 .trae/
 .claude/
-clauderc.json
 .map.json
+
+# jadx
+*.jadx.cache/
