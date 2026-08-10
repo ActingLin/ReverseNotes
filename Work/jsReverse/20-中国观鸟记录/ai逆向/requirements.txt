@@ -1,0 +1,2 @@
+# 纯 Python 标准库 + 一个加密库
+pycryptodome>=3.15

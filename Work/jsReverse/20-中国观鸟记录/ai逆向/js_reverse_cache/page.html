@@ -1,0 +1,216 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>中国观鸟记录中心 - 记录查询</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="keywords" content="鸟网、鸟类网、鸟种记录、鸟语、鸟图、鸟声、观鸟、鸟种识别、鸟类识别、鸟图识别、鸟分类、鸟种观测、鸟种查询、鸟图查询、鸟图视频、鸟图音频 、懂鸟、爱鸟、护鸟、观鸟活动、鸟种统计分析、AI智能化鸟种审核"/>
+    <meta http-equiv="description" content="中国地区观鸟数据服务平台，向大众提供1400多种鸟数据查询、鸟类分布查询、统计及用户观鸟记录管理、AI半自动鸟种标疑，向社会观鸟爱好者打造优质观鸟平台！"/>
+    <link type="text/css" rel="stylesheet" href="/plugins/font-awesome/css/font-awesome.min.css"/>
+    <link type="text/css" rel="stylesheet" href="/plugins/bootstrap/css/bootstrap.min.css"/>
+    <link type="text/css" rel="stylesheet" href="/plugins/layui/css/layui.css"/>
+    <link type="text/css" rel="stylesheet" href="/assets/css/home.css"/>
+    <style type="text/css">
+        .layui-table-view {
+            border: none !important;
+        }
+
+        .layui-form-label {
+            width: 110px !important;
+        }
+
+        .layui-input,
+        .layui-input-inline{
+            width:130px!important;
+            margin: 0px;
+            padding: 0px;
+        }
+    </style>
+</head>
+<body>
+<!--头部菜单导航开始--->
+<div class="header"></div>
+<!--头部菜单导航结束--->
+
+<div class="show-activity">
+    <div class="container-fluid">
+        <div class="show-activity-grid">
+            <div class="row">
+                <ol class="breadcrumb"
+                    style="background-color: transparent;border-radius: 0px;padding: 10px 12px;font-size: 12px;color: #888888;border-bottom: 1px solid #dddddd">
+                    <li>您当前所在位置:</li>
+                    <li><a href="/index.html">首页</a></li>
+                    <li><a class="active">记录查询</a></li>
+                </ol>
+            </div>
+            <div class="row">
+                <table class="layui-hide" id="grid" lay-filter="grid"></table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="searchToolbar">
+    <form class="layui-form layui-form-pane" action="">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">报告编号：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="serialId" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">记录用户：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="username" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">观测地点：</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="pointName" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">观测时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="startTime" id="start_datetimepicker" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid">至</div>
+                <div class="layui-input-inline">
+                    <input type="text" name="endTime" id="end_datetimepicker" autocomplete="off"  class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-inline" style="height: 43px">
+                <a class="layui-btn layui-btn-primary" lay-submit="" lay-filter="search">搜索</a>
+            </div>
+            </div>
+        </div>
+    </form>
+</script>
+
+<!--页脚布局开始--->
+
+<div class="footer"></div>
+<!--页脚布局结束--->
+
+</body>
+<script type="text/javascript" src="/plugins/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/plugins/layui/layui.js"></script>
+<script type="text/javascript" src="/plugins/jquery/jquery.query.js"></script>
+<script type="text/javascript" src="/assets/js/site.js"></script>
+<script type="text/javascript" src="/assets/js/include.js"></script>
+<script type="text/javascript" src="/assets/js/common/commutil.js"></script>
+<script type="text/javascript" src="/assets/js/match-phone.js"></script>
+<script type="text/javascript" src="/plugins/crypto-js/crypto-js.min.js"></script>
+<script type="text/javascript" src="/assets/js/aes.util.js"></script>
+<script type="text/javascript" src="/assets/js/common/base64.js"></script>
+<script type="text/javascript" src="/assets/js/md5.js"></script>
+<script type="text/javascript" src="/assets/js/jqueryAjax.js"></script>
+<script type="text/javascript" src="/assets/js/jquery.code.verify.js"></script>
+<script type="text/javascript">
+    layui.use(['table', 'form','laydate'], function () {
+        var table = layui.table, form = layui.form,layer=layui.layer,laydate=layui.laydate;
+
+        table.render({
+            id: 'grid',
+            elem: '#grid'
+            , url: site.domain + 'front/activity/search'
+            , method:'post'
+            , limit: 20
+            , limits:[20,50]
+            , page: true
+            , toolbar: '#searchToolbar'
+            , title: '观鸟记录导出'
+            , defaultToolbar: ['exports']
+            , autoSort:false
+            , cols: [[
+                {type: 'numbers', title: '序号'},
+               {field: 'serialId', width: 140, title: '报告编号', align: 'center', sort: true,templet:function (d) {
+                   var recordParam ={reportId:d.reportId,ts:new Date().getTime()};
+                   var urlParam = Base64.encode(JSON.stringify(recordParam));
+                   return (d.outsideCount >0) ?'<div><a target="_blank" href="/home/record/page.html?param='+urlParam+'&sign='+ calcMD5(recordParam)+'"  style="color:red;text-decoration: underline; ">'+d.serialId+'</a></div>' :'<div><a target="_blank" href="/home/record/page.html?param='+urlParam+'&sign='+ calcMD5(recordParam) +'"  style="color:#444444;text-decoration: underline; ">'+d.serialId+'</a></div>';
+                }} ,
+                {field: 'startTime',width: 350,title: '观测时间',templet: '<div>{{d.startTime}} 至 {{d.endTime}}</div>',align: 'center',sort:true},
+                {field: 'address', width: 380, title: '观测地点'},
+                {field: 'username',width: 200,title: '记录用户',templet: function (d) {
+                    var userParam ={memberid:d.userId,ts:new Date().getTime()};
+                    var urlParam = Base64.encode(JSON.stringify(userParam));
+                    return '<a target="_blank" href="/home/member/page.html?param='+urlParam+'&sign='+calcMD5(userParam)+'" style="color#444444;text-decoration: underline; ">'+phoneUtils.matchPhoneNum(d.username) +'</a>'
+                }},
+                {field: 'taxonCount', width: 130, title: '鸟种数量', align: 'center',sort:true},
+                {field: 'visitsCount', width: 130, title: '浏览数', align: 'center',sort:true}
+            ]],
+            parseData:function (resp) {
+                var rs = {"code":"", "count": 0, "data": [], "msg":""};
+                if(resp.code === 505 || resp.code === 405){
+                    BIRDREPORT_VISIT.codeHtml();
+                    return rs;
+                }
+
+                rs.code = resp.code;
+                rs.msg = resp.msg;
+
+                if(resp.count > 0){
+                    var decryptData = BIRDREPORT_APIJS.decode(resp.data);
+                    var data = JSON.parse(decryptData);
+                    return $.extend({},rs,{"code": resp.code, "count": resp.count, "data": data, "msg":resp.msg});
+                }
+                return rs;
+            },
+            done:function () {
+                //日期
+                laydate.render({
+                    elem: '#start_datetimepicker'
+                });
+
+                laydate.render({
+                    elem: '#end_datetimepicker'
+                });
+            }
+        });
+
+        table.on('sort(grid)', function(obj){
+            table.reload('grid', {
+                initSort: obj
+                ,where: {
+                    sortBy:obj.field,
+                    orderBy: obj.type
+                }
+                ,page: {
+                    curr: 0
+                }
+            });
+        });
+
+        form.on('submit(search)', function(data){
+           var search = data.field,isWhere=false;
+           for(var key in search){
+               if(isNotEmpty(data.field[key])){
+                   isWhere = true;
+                   break;
+               }
+           }
+
+           if(isWhere == false){
+               layer.msg("请填写搜索内容！");
+               return;
+           }
+
+            table.reload('grid', {
+                page: {curr: 1 }
+                ,where: search
+            }, 'data');
+
+            return false;
+
+        });
+    });
+</script>
+</html>
