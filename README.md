@@ -14,31 +14,35 @@
 
 ## 💻 JS 逆向（JSReverse）
 
-| ID |  平台/目标网址   |    加密形式/解决形式    |          逆向参数          | 难度 | ✅ 完成 |
-|:--:|:----------:|:---------------:|:----------------------:|:----:|:-:|
-| 2  |  某统计招标网站   |     AES/扣代码     |      aesKey epcos      |    |  ✅  |
-| 1  |    财联社     |    SHA1/扣代码     |          sign          |    |  ✅  |
-| 3  |    某度翻译    |   AES SHA1/纯算   |       Acs-Token        |    |   ✅  |
-| 4  |  某某男篮联赛数据  |                 |                        |    |     |
-| 5  |   某当网登录    |     AES 滑块      |           滑块           |    |   ✅  |
-| 6  |   学某通登录    |       AES       |     uname password     |    |   ✅  |
-| 7  | mytokencap |       MD5       |          code          |    |  ✅  |
-| 8  | 某易云音乐下载链接  |       扣代码       |       encSecKey        |    |   ✅  |
-| 9  |  某麦数据排行榜   |       扣代码       |        analysis        |    |   ✅  |
-| 10 |    某南航空    |  HmacSHA1/扣代码   |       hnairSign        |    |   ✅  |
-| 11 |    某钢股份    |  HmacSHA1/扣代码   |          x-系列          |    |   ✅  |
-| 12 |   企某查翻页    | HmacSHA512/扣代码  |    请求头:加密key:value     |    |  ✅  |
-| 13 |   36kr登录   |     webpack     |        phoneNum        |    |  ✅  |
-| 14 |    财新登录    |     webpack     |        password        |    |   ✅  |
-| 15 |    某问财     |       补环境       |        heixin-v        |    |   ✅  |
-| 16 |   达某乐点单    |                 |                        | |  |
-| 17 | 某某检筑市场监管平台 |     AES/扣代码     |          解密响应          | | ✅ |
-| 18 |    数位观察    |     AES/扣代码     |          解密响应          | | ✅ |
-| 19 |   中国移动登录   |     RSA/扣代码     |    account password    | | ✅ |
-| 20 |   中国观鸟记录   | MD5 AES RSA/扣代码 | 请求头sign Requestid/解密响应 | | ✅ |
-| 21 |    某矿集团    |   MD5 RSA/扣代码   |       param/解密响应       | | ✅ |
-| 22 |    某某产权交易中心    |   AES/AI 扣代码    |       解密响应       | | ✅ |
-| 23 |    医保局加解密    |       补环境       |    请求头:x-tif-系列/响应:encdata    | |  |
+| ID |  平台/目标网址   |             加密形式/解决形式              |          逆向参数          | 难度 | ✅ 完成 |
+|:--:|:----------:|:----------------------------------:|:----------------------:|:----:|:-:|
+| 2  |  某统计招标网站   |              AES/扣代码               |      aesKey epcos      |    |  ✅  |
+| 1  |    财联社     |              SHA1/扣代码              |          sign          |    |  ✅  |
+| 3  |    某度翻译    |            AES SHA1/纯算             |       Acs-Token        |    |   ✅  |
+| 4  |  某某男篮联赛数据  |                                    |                        |    |     |
+| 5  |   某当网登录    |               AES、滑块               |           滑块           |    |   ✅  |
+| 6  |   学某通登录    |                AES/                |     uname password     |    |   ✅  |
+| 7  | mytokencap |                MD5/                |          code          |    |  ✅  |
+| 8  | 某易云音乐下载链接  |                /扣代码                |       encSecKey        |    |   ✅  |
+| 9  |  某麦数据排行榜   |                /扣代码                |        analysis        |    |   ✅  |
+| 10 |    某南航空    |            HmacSHA1/扣代码            |       hnairSign        |    |   ✅  |
+| 11 |    某钢股份    |            HmacSHA1/扣代码            |          x-系列          |    |   ✅  |
+| 12 |   企某查翻页    |           HmacSHA512/扣代码           |    请求头:加密key:value     |    |  ✅  |
+| 13 |   36kr登录   |              /webpack              |        phoneNum        |    |  ✅  |
+| 14 |    财新登录    |              /webpack              |        password        |    |   ✅  |
+| 15 |    某问财     |                /补环境                |        heixin-v        |    |   ✅  |
+| 16 |   达某乐点单    |                                    |                        | |  |
+| 17 | 某某检筑市场监管平台 |              AES/扣代码               |          解密响应          | | ✅ |
+| 18 |    数位观察    |              AES/扣代码               |          解密响应          | | ✅ |
+| 19 |   中国移动登录   |              RSA/扣代码               |    account password    | | ✅ |
+| 20 |   中国观鸟记录   |          MD5 AES RSA/扣代码           | 请求头sign Requestid/解密响应 | | ✅ |
+| 21 |    某矿集团    |            MD5 RSA/扣代码             |       param/解密响应       | | ✅ |
+| 22 |  某某产权交易中心  |             AES/AI+扣代码             |          解密响应          | | ✅ |
+| 23 |   医保局加解密   |  dp-v4-flash+camoufox-reverse-mcp  | 请求头x-tif-系列/响应encdata  | | ✅ |
+| 24 |   中国空气质量   |          AES DES MD5/扣代码           |   请求头hA4Nse2cT/解密响应    | | ✅ |
+| 25 |    万方数据    |     Protobuf/blackboxprotobuf      |     payload参数/解码响应     | | ✅ |
+| 26 |    万达电影    |            MD5+salt/纯算             |       请求头MX-API        | | ✅ |
+| 27 |    某速体育    | 阿里云WAF:acw_sc__v2、MD5+salt、AES动态秘钥 |  请求头:accept/Cookie风控:acw_sc__v2  | | ✅ |
 
 > 🧩 技巧方向：调试混淆 JS、还原加密逻辑（如 AES/RSA/sign 算法）、AST 反混淆、浏览器自动化绕过。
 
