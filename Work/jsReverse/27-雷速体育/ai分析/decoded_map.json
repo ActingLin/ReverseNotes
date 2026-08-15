@@ -1,0 +1,727 @@
+[
+  {
+    "index": 601,
+    "indexHex": "0x259",
+    "plain": "[^\\d:@]\\b"
+  },
+  {
+    "index": 551,
+    "indexHex": "0x227",
+    "plain": "DUaDm"
+  },
+  {
+    "index": 528,
+    "indexHex": "0x210",
+    "plain": "toLowerCas"
+  },
+  {
+    "index": 502,
+    "indexHex": "0x1f6",
+    "plain": "split"
+  },
+  {
+    "index": 530,
+    "indexHex": "0x212",
+    "plain": "ative code"
+  },
+  {
+    "index": 580,
+    "indexHex": "0x244",
+    "plain": "ceil"
+  },
+  {
+    "index": 548,
+    "indexHex": "0x224",
+    "plain": "sCEkW"
+  },
+  {
+    "index": 542,
+    "indexHex": "0x21e",
+    "plain": "debugger"
+  },
+  {
+    "index": 512,
+    "indexHex": "0x200",
+    "plain": "tqVGh"
+  },
+  {
+    "index": 592,
+    "indexHex": "0x250",
+    "plain": "vSouM"
+  },
+  {
+    "index": 510,
+    "indexHex": "0x1fe",
+    "plain": "object"
+  },
+  {
+    "index": 544,
+    "indexHex": "0x220",
+    "plain": "return thi"
+  },
+  {
+    "index": 611,
+    "indexHex": "0x263",
+    "plain": "function r"
+  },
+  {
+    "index": 595,
+    "indexHex": "0x253",
+    "plain": "andom() { "
+  },
+  {
+    "index": 606,
+    "indexHex": "0x25e",
+    "plain": "[native co"
+  },
+  {
+    "index": 610,
+    "indexHex": "0x262",
+    "plain": "de] }"
+  },
+  {
+    "index": 635,
+    "indexHex": "0x27b",
+    "plain": "1|4|3|0|2"
+  },
+  {
+    "index": 633,
+    "indexHex": "0x279",
+    "plain": "; debugger"
+  },
+  {
+    "index": 621,
+    "indexHex": "0x26d",
+    "plain": ";return s["
+  },
+  {
+    "index": 583,
+    "indexHex": "0x247",
+    "plain": "'charCodeA"
+  },
+  {
+    "index": 575,
+    "indexHex": "0x23f",
+    "plain": "t'](0);"
+  },
+  {
+    "index": 559,
+    "indexHex": "0x22f",
+    "plain": "debugger"
+  },
+  {
+    "index": 574,
+    "indexHex": "0x23e",
+    "plain": "\\{[\\s\\S]*["
+  },
+  {
+    "index": 566,
+    "indexHex": "0x236",
+    "plain": "/\\*]{2}[\\s"
+  },
+  {
+    "index": 573,
+    "indexHex": "0x23d",
+    "plain": "\\S]*\\}"
+  },
+  {
+    "index": 558,
+    "indexHex": "0x22e",
+    "plain": "\\b[\\w\\/:\\-"
+  },
+  {
+    "index": 591,
+    "indexHex": "0x24f",
+    "plain": "\\[\\]<]{4,}"
+  },
+  {
+    "index": 618,
+    "indexHex": "0x26a",
+    "plain": "[^\\d:@]\\b"
+  },
+  {
+    "index": 572,
+    "indexHex": "0x23c",
+    "plain": "1234cf0d46"
+  },
+  {
+    "index": 543,
+    "indexHex": "0x21f",
+    "plain": "6|4|2|3|1|"
+  },
+  {
+    "index": 619,
+    "indexHex": "0x26b",
+    "plain": "5|0"
+  },
+  {
+    "index": 518,
+    "indexHex": "0x206",
+    "plain": "undefined"
+  },
+  {
+    "index": 569,
+    "indexHex": "0x239",
+    "plain": "function f"
+  },
+  {
+    "index": 505,
+    "indexHex": "0x1f9",
+    "plain": "ill() { [n"
+  },
+  {
+    "index": 547,
+    "indexHex": "0x223",
+    "plain": "ative code"
+  },
+  {
+    "index": 504,
+    "indexHex": "0x1f8",
+    "plain": "] }"
+  },
+  {
+    "index": 497,
+    "indexHex": "0x1f1",
+    "plain": "0123456789"
+  },
+  {
+    "index": 515,
+    "indexHex": "0x203",
+    "plain": "ABCDEF"
+  },
+  {
+    "index": 607,
+    "indexHex": "0x25f",
+    "plain": "hWfpW"
+  },
+  {
+    "index": 598,
+    "indexHex": "0x256",
+    "plain": "cfUcQ"
+  },
+  {
+    "index": 579,
+    "indexHex": "0x243",
+    "plain": "random"
+  },
+  {
+    "index": 617,
+    "indexHex": "0x269",
+    "plain": "prototype"
+  },
+  {
+    "index": 514,
+    "indexHex": "0x202",
+    "plain": "fill"
+  },
+  {
+    "index": 506,
+    "indexHex": "0x1fa",
+    "plain": "stringify"
+  },
+  {
+    "index": 534,
+    "indexHex": "0x216",
+    "plain": "zNjlP"
+  },
+  {
+    "index": 519,
+    "indexHex": "0x207",
+    "plain": "split"
+  },
+  {
+    "index": 533,
+    "indexHex": "0x215",
+    "plain": "YnLQ8QRUYO"
+  },
+  {
+    "index": 576,
+    "indexHex": "0x240",
+    "plain": "wIzvu"
+  },
+  {
+    "index": 499,
+    "indexHex": "0x1f3",
+    "plain": "fWHWI"
+  },
+  {
+    "index": 593,
+    "indexHex": "0x251",
+    "plain": "arg1"
+  },
+  {
+    "index": 594,
+    "indexHex": "0x252",
+    "plain": "slice"
+  },
+  {
+    "index": 567,
+    "indexHex": "0x237",
+    "plain": "join"
+  },
+  {
+    "index": 495,
+    "indexHex": "0x1ef",
+    "plain": "toString"
+  },
+  {
+    "index": 609,
+    "indexHex": "0x261",
+    "plain": "vSouM"
+  },
+  {
+    "index": 588,
+    "indexHex": "0x24c",
+    "plain": "stackTrace"
+  },
+  {
+    "index": 596,
+    "indexHex": "0x254",
+    "plain": "Limit"
+  },
+  {
+    "index": 571,
+    "indexHex": "0x23b",
+    "plain": "SVGAnimate"
+  },
+  {
+    "index": 532,
+    "indexHex": "0x214",
+    "plain": "String"
+  },
+  {
+    "index": 553,
+    "indexHex": "0x229",
+    "plain": "XndRr"
+  },
+  {
+    "index": 527,
+    "indexHex": "0x20f",
+    "plain": "pSPBw"
+  },
+  {
+    "index": 616,
+    "indexHex": "0x268",
+    "plain": "name"
+  },
+  {
+    "index": 605,
+    "indexHex": "0x25d",
+    "plain": "stack"
+  },
+  {
+    "index": 590,
+    "indexHex": "0x24e",
+    "plain": "nNRFD"
+  },
+  {
+    "index": 603,
+    "indexHex": "0x25b",
+    "plain": "match"
+  },
+  {
+    "index": 624,
+    "indexHex": "0x270",
+    "plain": "map"
+  },
+  {
+    "index": 631,
+    "indexHex": "0x277",
+    "plain": "ESScv"
+  },
+  {
+    "index": 546,
+    "indexHex": "0x222",
+    "plain": "length"
+  },
+  {
+    "index": 565,
+    "indexHex": "0x235",
+    "plain": "sCEkW"
+  },
+  {
+    "index": 640,
+    "indexHex": "0x280",
+    "plain": "rGtmy"
+  },
+  {
+    "index": 625,
+    "indexHex": "0x271",
+    "plain": "TyAwf"
+  },
+  {
+    "index": 599,
+    "indexHex": "0x257",
+    "plain": "constructo"
+  },
+  {
+    "index": 634,
+    "indexHex": "0x27a",
+    "plain": "rnbmC"
+  },
+  {
+    "index": 614,
+    "indexHex": "0x266",
+    "plain": "QyYkM"
+  },
+  {
+    "index": 500,
+    "indexHex": "0x1f4",
+    "plain": "xQoFv"
+  },
+  {
+    "index": 620,
+    "indexHex": "0x26c",
+    "plain": "test"
+  },
+  {
+    "index": 622,
+    "indexHex": "0x26e",
+    "plain": "HvTtd"
+  },
+  {
+    "index": 608,
+    "indexHex": "0x260",
+    "plain": "indexOf"
+  },
+  {
+    "index": 578,
+    "indexHex": "0x242",
+    "plain": "ZfOGs"
+  },
+  {
+    "index": 541,
+    "indexHex": "0x21d",
+    "plain": "ewzXT"
+  },
+  {
+    "index": 516,
+    "indexHex": "0x204",
+    "plain": "cIaWP"
+  },
+  {
+    "index": 587,
+    "indexHex": "0x24b",
+    "plain": "TBazD"
+  },
+  {
+    "index": 555,
+    "indexHex": "0x22b",
+    "plain": "QyMyu"
+  },
+  {
+    "index": 577,
+    "indexHex": "0x241",
+    "plain": "yQNLK"
+  },
+  {
+    "index": 563,
+    "indexHex": "0x233",
+    "plain": "WEReJ"
+  },
+  {
+    "index": 501,
+    "indexHex": "0x1f5",
+    "plain": "Tpxny"
+  },
+  {
+    "index": 552,
+    "indexHex": "0x228",
+    "plain": "kGKjO"
+  },
+  {
+    "index": 613,
+    "indexHex": "0x265",
+    "plain": "TABxa"
+  },
+  {
+    "index": 581,
+    "indexHex": "0x245",
+    "plain": "bmjOt"
+  },
+  {
+    "index": 639,
+    "indexHex": "0x27f",
+    "plain": "mjgIr"
+  },
+  {
+    "index": 584,
+    "indexHex": "0x248",
+    "plain": "gGocA"
+  },
+  {
+    "index": 539,
+    "indexHex": "0x21b",
+    "plain": "floor"
+  },
+  {
+    "index": 642,
+    "indexHex": "0x282",
+    "plain": "VkSwJ"
+  },
+  {
+    "index": 630,
+    "indexHex": "0x276",
+    "plain": "reVkx"
+  },
+  {
+    "index": 562,
+    "indexHex": "0x232",
+    "plain": "Tclsh"
+  },
+  {
+    "index": 629,
+    "indexHex": "0x275",
+    "plain": "FcuQh"
+  },
+  {
+    "index": 526,
+    "indexHex": "0x20e",
+    "plain": "sWBMO"
+  },
+  {
+    "index": 637,
+    "indexHex": "0x27d",
+    "plain": "zbAnq"
+  },
+  {
+    "index": 536,
+    "indexHex": "0x218",
+    "plain": "UpDfB"
+  },
+  {
+    "index": 632,
+    "indexHex": "0x278",
+    "plain": "TzkyL"
+  },
+  {
+    "index": 524,
+    "indexHex": "0x20c",
+    "plain": "pLijN"
+  },
+  {
+    "index": 604,
+    "indexHex": "0x25c",
+    "plain": "OhWYD"
+  },
+  {
+    "index": 531,
+    "indexHex": "0x213",
+    "plain": "OTWIQ"
+  },
+  {
+    "index": 564,
+    "indexHex": "0x234",
+    "plain": "OZsrh"
+  },
+  {
+    "index": 537,
+    "indexHex": "0x219",
+    "plain": "splice"
+  },
+  {
+    "index": 496,
+    "indexHex": "0x1f0",
+    "plain": "push"
+  },
+  {
+    "index": 521,
+    "indexHex": "0x209",
+    "plain": "ELako"
+  },
+  {
+    "index": 535,
+    "indexHex": "0x217",
+    "plain": "Jnqvw"
+  },
+  {
+    "index": 554,
+    "indexHex": "0x22a",
+    "plain": "dNxBf"
+  },
+  {
+    "index": 602,
+    "indexHex": "0x25a",
+    "plain": "bfMWH"
+  },
+  {
+    "index": 520,
+    "indexHex": "0x208",
+    "plain": "ytsxz"
+  },
+  {
+    "index": 597,
+    "indexHex": "0x255",
+    "plain": "ceil"
+  },
+  {
+    "index": 570,
+    "indexHex": "0x23a",
+    "plain": "ibDxG"
+  },
+  {
+    "index": 641,
+    "indexHex": "0x281",
+    "plain": "XLZql"
+  },
+  {
+    "index": 498,
+    "indexHex": "0x1f2",
+    "plain": "JEhjy"
+  },
+  {
+    "index": 586,
+    "indexHex": "0x24a",
+    "plain": "XtfCL"
+  },
+  {
+    "index": 525,
+    "indexHex": "0x20d",
+    "plain": "oyURg"
+  },
+  {
+    "index": 627,
+    "indexHex": "0x273",
+    "plain": "JAtXV"
+  },
+  {
+    "index": 522,
+    "indexHex": "0x20a",
+    "plain": "KwuYI"
+  },
+  {
+    "index": 507,
+    "indexHex": "0x1fb",
+    "plain": "EyvDd"
+  },
+  {
+    "index": 636,
+    "indexHex": "0x27c",
+    "plain": "QdeAe"
+  },
+  {
+    "index": 615,
+    "indexHex": "0x267",
+    "plain": "tqzSI"
+  },
+  {
+    "index": 508,
+    "indexHex": "0x1fc",
+    "plain": "rmZmX"
+  },
+  {
+    "index": 538,
+    "indexHex": "0x21a",
+    "plain": "SZZDm"
+  },
+  {
+    "index": 557,
+    "indexHex": "0x22d",
+    "plain": "XgFIK"
+  },
+  {
+    "index": 568,
+    "indexHex": "0x238",
+    "plain": "DUaDm"
+  },
+  {
+    "index": 509,
+    "indexHex": "0x1fd",
+    "plain": "HYmFC"
+  },
+  {
+    "index": 560,
+    "indexHex": "0x230",
+    "plain": "webdriver"
+  },
+  {
+    "index": 540,
+    "indexHex": "0x21c",
+    "plain": "nDUTN"
+  },
+  {
+    "index": 561,
+    "indexHex": "0x231",
+    "plain": "window"
+  },
+  {
+    "index": 626,
+    "indexHex": "0x272",
+    "plain": "JXQtd"
+  },
+  {
+    "index": 523,
+    "indexHex": "0x20b",
+    "plain": "HCIri"
+  },
+  {
+    "index": 638,
+    "indexHex": "0x27e",
+    "plain": "slvNv"
+  },
+  {
+    "index": 600,
+    "indexHex": "0x258",
+    "plain": "copbc"
+  },
+  {
+    "index": 582,
+    "indexHex": "0x246",
+    "plain": "aWLpN"
+  },
+  {
+    "index": 529,
+    "indexHex": "0x211",
+    "plain": "tqVGh"
+  },
+  {
+    "index": 585,
+    "indexHex": "0x249",
+    "plain": "MHEFW"
+  },
+  {
+    "index": 517,
+    "indexHex": "0x205",
+    "plain": "HYlyS"
+  },
+  {
+    "index": 550,
+    "indexHex": "0x226",
+    "plain": "dgqzn"
+  },
+  {
+    "index": 612,
+    "indexHex": "0x264",
+    "plain": "GTXHy"
+  },
+  {
+    "index": 628,
+    "indexHex": "0x274",
+    "plain": "eBEED"
+  },
+  {
+    "index": 545,
+    "indexHex": "0x221",
+    "plain": "toLowerCas"
+  },
+  {
+    "index": 623,
+    "indexHex": "0x26f",
+    "plain": "YwVfg"
+  },
+  {
+    "index": 589,
+    "indexHex": "0x24d",
+    "plain": "nothing2re"
+  },
+  {
+    "index": 643,
+    "indexHex": "0x283",
+    "plain": "load10ba"
+  },
+  {
+    "index": 513,
+    "indexHex": "0x201",
+    "plain": "reload"
+  }
+]
