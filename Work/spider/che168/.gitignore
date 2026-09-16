@@ -1,0 +1,9 @@
+# 真实密码，绝不能进仓库（模板见 .env.example）
+.env
+
+# Python 虚拟环境
+.venv/
+
+# 调试/中间产物
+__pycache__/
+*.pyc

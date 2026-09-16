@@ -1,0 +1,33 @@
+services:
+  mysql:
+    image: mysql:8.4.9  # 锁定具体小版本，避免自动升级引入未知变化
+    container_name: mysql-scrapy
+    restart: unless-stopped
+    environment:
+      # 这两个值来自同目录的 .env（见 .env.example），不要把密码写死在这里
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: scrapy_data  # 为 Scrapy 项目预设数据库
+      MYSQL_USER: scrapy_user
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: Asia/Shanghai
+    ports:
+      # 本机 3306 已被原生 MySQL 服务占用（mysqld.exe），所以对外映射到 3307
+      - "3307:3306"
+    volumes:
+      # 绑定挂载：数据直接落在 Windows 盘上，方便备份/直接查看。
+      # 用正斜杠，比反斜杠更稳（反斜杠在 YAML 里是转义字符）。
+      # 注意：这个目录是 MySQL 的完整数据目录，别和别的 MySQL 实例共用同一个路径。
+      - D:/AAA-work/db_docker/mysql/data_che168:/var/lib/mysql
+      - ./conf.d:/etc/mysql/conf.d  # 自定义配置目录（当前为空，留给后续调优）
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      # 注意：不要加 --default-authentication-plugin，该变量在 MySQL 8.4 已被删除，
+      # 加上会导致 mysqld 直接 Aborting（unknown variable 'default-authentication-plugin'）。
+      # 8.4 的默认认证插件本来就是 caching_sha2_password，无需显式指定。
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
