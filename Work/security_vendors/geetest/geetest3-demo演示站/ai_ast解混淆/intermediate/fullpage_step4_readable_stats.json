@@ -1,0 +1,10 @@
+{
+  "extrasCleared": 3057,
+  "memberToDot": 3461,
+  "objectKeyToIdentifier": 850,
+  "sequencesSplit": 194,
+  "booleansFolded": 101,
+  "constantsFolded": 7,
+  "constantIfFolded": 0,
+  "emptyStatementsRemoved": 0
+}

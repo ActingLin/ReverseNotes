@@ -1,0 +1,83 @@
+{
+  "original": "D:\\AAA-work\\ReverseNotes\\Work\\验证码\\极验\\test_解混淆\\source\\original\\fullpage.9.2.0-guwyxh.js",
+  "deobf": "D:\\AAA-work\\ReverseNotes\\Work\\验证码\\极验\\test_解混淆\\source\\deobfuscated\\fullpage_9.2.0_deobf.js",
+  "checks": {
+    "parse:original": {
+      "ok": true,
+      "detail": "babel"
+    },
+    "compile:original": {
+      "ok": true,
+      "detail": "vm.Script"
+    },
+    "parse:deobf": {
+      "ok": true,
+      "detail": "babel"
+    },
+    "compile:deobf": {
+      "ok": true,
+      "detail": "vm.Script"
+    },
+    "decoder.strings": {
+      "ok": true,
+      "detail": "1400 entries, 0 diffs"
+    },
+    "decoder.stateMatrix": {
+      "ok": true,
+      "detail": "0 diffs"
+    },
+    "sandbox.noError": {
+      "ok": true,
+      "detail": "original=ok, deobf=ok"
+    },
+    "sandbox.globalsEqual": {
+      "ok": true,
+      "detail": "[\"FAIL\",\"Geetest\",\"Vwtrj\",\"pure\"]"
+    },
+    "sandbox.exportShapeEqual": {
+      "ok": true,
+      "detail": "448 bytes"
+    },
+    "residue.noAliasBlocks": {
+      "ok": true,
+      "detail": "concatAlias=0"
+    },
+    "residue.noDecoderCalls": {
+      "ok": true,
+      "detail": "cvCalls=0"
+    },
+    "residue.noStateTokens": {
+      "ok": true,
+      "detail": "ddCalls=0"
+    },
+    "residue.stateLoopsReduced": {
+      "ok": true,
+      "detail": "123 -> 4"
+    }
+  },
+  "metrics": {
+    "original": {
+      "lines": 9603,
+      "bytes": 543559,
+      "forHeaderCount": 123,
+      "switchCount": 127,
+      "concatAlias": 594,
+      "shiftCalls": 594,
+      "cvDecoderCalls": 1,
+      "ddStateTokens": 471,
+      "dollarIdentifiers": 11840
+    },
+    "deobf": {
+      "lines": 4836,
+      "bytes": 240374,
+      "forHeaderCount": 4,
+      "switchCount": 8,
+      "concatAlias": 0,
+      "shiftCalls": 1,
+      "cvDecoderCalls": 0,
+      "ddStateTokens": 0,
+      "dollarIdentifiers": 1479
+    }
+  },
+  "failed": false
+}

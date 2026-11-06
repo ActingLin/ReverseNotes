@@ -1,0 +1,39 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "removedDeclarators": 1190,
+      "removedDeclarations": 594,
+      "removedShiftStatements": 0
+    },
+    {
+      "round": 2,
+      "removedDeclarators": 0,
+      "removedDeclarations": 0,
+      "removedShiftStatements": 594
+    },
+    {
+      "round": 3,
+      "removedDeclarators": 594,
+      "removedDeclarations": 0,
+      "removedShiftStatements": 0
+    },
+    {
+      "round": 4,
+      "removedDeclarators": 594,
+      "removedDeclarations": 594,
+      "removedShiftStatements": 0
+    },
+    {
+      "round": 5,
+      "removedDeclarators": 0,
+      "removedDeclarations": 0,
+      "removedShiftStatements": 0
+    }
+  ],
+  "total": {
+    "removedDeclarators": 2378,
+    "removedDeclarations": 1188,
+    "removedShiftStatements": 594
+  }
+}

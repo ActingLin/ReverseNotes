@@ -1,0 +1,47 @@
+{
+  "rounds": [
+    {
+      "round": 1,
+      "unflattened": 107,
+      "removedEmpty": 8,
+      "skipped": 93,
+      "failReasons": {
+        "conditional-or-unknown-transition": 2,
+        "shape": 89,
+        "function-decl": 2
+      }
+    },
+    {
+      "round": 2,
+      "unflattened": 4,
+      "removedEmpty": 0,
+      "skipped": 93,
+      "failReasons": {
+        "conditional-or-unknown-transition": 2,
+        "shape": 89,
+        "function-decl": 2
+      }
+    },
+    {
+      "round": 3,
+      "unflattened": 0,
+      "removedEmpty": 0,
+      "skipped": 93,
+      "failReasons": {
+        "conditional-or-unknown-transition": 2,
+        "shape": 89,
+        "function-decl": 2
+      }
+    }
+  ],
+  "totals": {
+    "unflattened": 111,
+    "removedEmpty": 8,
+    "skipped": 93,
+    "failReasons": {
+      "conditional-or-unknown-transition": 2,
+      "shape": 89,
+      "function-decl": 2
+    }
+  }
+}

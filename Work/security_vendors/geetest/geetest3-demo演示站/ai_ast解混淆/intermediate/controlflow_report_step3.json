@@ -1,0 +1,56 @@
+{
+  "input": "intermediate/fullpage_step3_unflattened.js",
+  "machines": 4,
+  "categories": {
+    "chain": 2,
+    "conditional": 2,
+    "cyclic": 0,
+    "joined": 0,
+    "unknown": 0,
+    "empty": 0
+  },
+  "machinesWithInit": 4,
+  "totalCases": 23,
+  "details": [
+    {
+      "stateName": "$_DDIDE",
+      "init": 2,
+      "exitState": 14,
+      "cases": 8,
+      "terminalCases": 1,
+      "unknownCases": 0,
+      "category": "conditional",
+      "loc": 5
+    },
+    {
+      "stateName": "$_DDJFx",
+      "init": 2,
+      "exitState": 10,
+      "cases": 13,
+      "terminalCases": 1,
+      "unknownCases": 0,
+      "category": "conditional",
+      "loc": 50
+    },
+    {
+      "stateName": "$_DCGGY",
+      "init": 19,
+      "exitState": 18,
+      "cases": 1,
+      "terminalCases": 1,
+      "unknownCases": 0,
+      "category": "chain",
+      "loc": 649
+    },
+    {
+      "stateName": "$_DDABJ",
+      "init": 19,
+      "exitState": 18,
+      "cases": 1,
+      "terminalCases": 1,
+      "unknownCases": 0,
+      "category": "chain",
+      "loc": 1319
+    }
+  ]
+}

@@ -1,0 +1,233 @@
+{
+  "count": 38,
+  "renames": [
+    {
+      "oldName": "$_DDICz",
+      "newName": "_a1",
+      "kind": "param",
+      "line": 3
+    },
+    {
+      "oldName": "$_DDIDE",
+      "newName": "_v1",
+      "kind": "var",
+      "line": 4
+    },
+    {
+      "oldName": "$_DDIGz",
+      "newName": "_v2",
+      "kind": "var",
+      "line": 11
+    },
+    {
+      "oldName": "$_DDIFr",
+      "newName": "_v3",
+      "kind": "var",
+      "line": 12
+    },
+    {
+      "oldName": "$_DDIEi",
+      "newName": "_v4",
+      "kind": "var",
+      "line": 16
+    },
+    {
+      "oldName": "$_DDIHd",
+      "newName": "_v5",
+      "kind": "var",
+      "line": 17
+    },
+    {
+      "oldName": "$_DDIIy",
+      "newName": "_a2",
+      "kind": "param",
+      "line": 38
+    },
+    {
+      "oldName": "$_DDJCP",
+      "newName": "_f1",
+      "kind": "local",
+      "line": 49
+    },
+    {
+      "oldName": "$_DDJDD",
+      "newName": "_a3",
+      "kind": "param",
+      "line": 49
+    },
+    {
+      "oldName": "$_DDJEF",
+      "newName": "_a4",
+      "kind": "param",
+      "line": 49
+    },
+    {
+      "oldName": "$_DDJFx",
+      "newName": "_v6",
+      "kind": "var",
+      "line": 50
+    },
+    {
+      "oldName": "$_DDJJY",
+      "newName": "_v7",
+      "kind": "var",
+      "line": 62
+    },
+    {
+      "oldName": "$_DDJHm",
+      "newName": "_v8",
+      "kind": "var",
+      "line": 76
+    },
+    {
+      "oldName": "$_DDJGV",
+      "newName": "_v9",
+      "kind": "var",
+      "line": 80
+    },
+    {
+      "oldName": "$_DDJIW",
+      "newName": "_v10",
+      "kind": "var",
+      "line": 95
+    },
+    {
+      "oldName": "$_BFr",
+      "newName": "_f2",
+      "kind": "hoisted",
+      "line": 122
+    },
+    {
+      "oldName": "$_BEy",
+      "newName": "_f3",
+      "kind": "hoisted",
+      "line": 421
+    },
+    {
+      "oldName": "$_BDs",
+      "newName": "_f4",
+      "kind": "hoisted",
+      "line": 439
+    },
+    {
+      "oldName": "$_BCR",
+      "newName": "_f5",
+      "kind": "hoisted",
+      "line": 680
+    },
+    {
+      "oldName": "$_DCGGY",
+      "newName": "_v11",
+      "kind": "var",
+      "line": 681
+    },
+    {
+      "oldName": "$_BBn",
+      "newName": "_f6",
+      "kind": "hoisted",
+      "line": 735
+    },
+    {
+      "oldName": "$_BAt",
+      "newName": "_f7",
+      "kind": "hoisted",
+      "line": 742
+    },
+    {
+      "oldName": "$_Ja",
+      "newName": "_f8",
+      "kind": "hoisted",
+      "line": 745
+    },
+    {
+      "oldName": "$_Iv",
+      "newName": "_f9",
+      "kind": "hoisted",
+      "line": 757
+    },
+    {
+      "oldName": "$_HX",
+      "newName": "_f10",
+      "kind": "hoisted",
+      "line": 760
+    },
+    {
+      "oldName": "$_Gx",
+      "newName": "_f11",
+      "kind": "hoisted",
+      "line": 770
+    },
+    {
+      "oldName": "$_FX",
+      "newName": "_f12",
+      "kind": "hoisted",
+      "line": 773
+    },
+    {
+      "oldName": "$_Ei",
+      "newName": "_f13",
+      "kind": "hoisted",
+      "line": 780
+    },
+    {
+      "oldName": "$_DDABJ",
+      "newName": "_v12",
+      "kind": "var",
+      "line": 1406
+    },
+    {
+      "oldName": "$_Ei",
+      "newName": "_f14",
+      "kind": "local",
+      "line": 1837
+    },
+    {
+      "oldName": "$_FX",
+      "newName": "_f15",
+      "kind": "local",
+      "line": 1852
+    },
+    {
+      "oldName": "$_Gx",
+      "newName": "_f16",
+      "kind": "local",
+      "line": 1874
+    },
+    {
+      "oldName": "$_HX",
+      "newName": "_f17",
+      "kind": "local",
+      "line": 1877
+    },
+    {
+      "oldName": "$_Iv",
+      "newName": "_f18",
+      "kind": "local",
+      "line": 1879
+    },
+    {
+      "oldName": "$_Ja",
+      "newName": "_f19",
+      "kind": "local",
+      "line": 1886
+    },
+    {
+      "oldName": "$_BAt",
+      "newName": "_f20",
+      "kind": "local",
+      "line": 1888
+    },
+    {
+      "oldName": "$_DJL",
+      "newName": "_f21",
+      "kind": "local",
+      "line": 1891
+    },
+    {
+      "oldName": "$_DJL",
+      "newName": "_f22",
+      "kind": "hoisted",
+      "line": 2243
+    }
+  ]
+}
