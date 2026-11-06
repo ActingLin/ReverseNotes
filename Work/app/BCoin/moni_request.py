@@ -25,7 +25,28 @@ def calculate_md5(data):
     # 返回MD5哈希的十六进制表示
     return md5_hash.hexdigest()
 
-headers = {
+# headers = {
+#   "accept": "application/json,application/xml,application/xhtml+xml,text/html;q=0.9,image/webp,*/*;q=0.8",
+#   "accept-encoding": "gzip, deflate",
+#   "accept-language": "zh-CN,zh",
+#   "appversion": "4.0.3",
+#   "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+#   "from": "Android",
+#   "fromandroid": "bicoin",
+#   "mobilid": "d96349a5-e680-4588-90a4-dc68c0cdf6dc",
+#   "mobilkey": "2CF894E76DCAE67D5E8FD6715FF98548",
+#   "redrisegreendown": "2",
+#   "salt": "0",
+#   # "sign": "daa6bccda73327785e72258383ae12db2",
+#   # "time": "1761636942679",
+#   "token": "53cb9738897f7c965512b9844b826325",
+#   "user-agent": "Mozilla/5.0 (Linux; U; Android 13; zh-cn; M2012K11AC Build/TKQ1.221114.001) AppleWebKit/533.1 (KHTML, like Gecko) Version/5.0 Mobile Safari/533.1",
+#   "usertempid": "",
+#   "host": "i.bicoin.com.cn"
+# }
+
+
+headers ={
   "accept": "application/json,application/xml,application/xhtml+xml,text/html;q=0.9,image/webp,*/*;q=0.8",
   "accept-encoding": "gzip, deflate",
   "accept-language": "zh-CN,zh",
@@ -36,18 +57,17 @@ headers = {
   "mobilid": "d96349a5-e680-4588-90a4-dc68c0cdf6dc",
   "mobilkey": "2CF894E76DCAE67D5E8FD6715FF98548",
   "redrisegreendown": "2",
-  "salt": "0",
-  # "sign": "daa6bccda73327785e72258383ae12db2",
-  # "time": "1761636942679",
+  "salt": "9",
+  "sign": "dae4a7f70084d22029b9b4fc52457868d",
+  "time": "1787105338306",
   "token": "53cb9738897f7c965512b9844b826325",
   "user-agent": "Mozilla/5.0 (Linux; U; Android 13; zh-cn; M2012K11AC Build/TKQ1.221114.001) AppleWebKit/533.1 (KHTML, like Gecko) Version/5.0 Mobile Safari/533.1",
-  "usertempid": "",
-  "host": "i.bicoin.com.cn"
+  "usertempid": ""
 }
 
 times = int(time.time() * 1000)
 # print(times)
-str = '53cb9738897f7c965512b9844b826325' + str(times) + "0" + 'getUserAccountInfoBySecretNew'
+str = '53cb9738897f7c965512b9844b826325' + str(times) + "9" + 'getUserAccountInfoBySecretNew'
 # print(str)
 sign = 'd'+calculate_md5(str)
 # print(sign)

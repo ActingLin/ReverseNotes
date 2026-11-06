@@ -15,7 +15,7 @@ from loguru import logger
 
 class ProxyRedis:
     def __init__(self):
-        self.r = redis.Redis(host=HOST, port=PORT, db=DB, password=PASSWORD, decode_responses=True)
+        self.r = redis.Redis(host=HOST, port=PORT, db=DB, password=None, decode_responses=True)
 
     # 添加ip并添加初始权重SCORE
     def zset_zadd(self, ip):

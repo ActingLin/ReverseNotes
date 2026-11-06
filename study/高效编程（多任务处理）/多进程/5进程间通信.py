@@ -23,6 +23,7 @@ def ipc_dict(my_dict):
     my_dict['y'] = 'y'
     my_dict['z'] = 'z'
     print(f"[子进程] 字典: {my_dict}")
+    print(f"[子进程] 已放入数据")
 
 
 # 列表共享
@@ -31,6 +32,7 @@ def ipc_list(my_list):
     my_list.append('y')
     my_list.append('z')
     print(f"[子进程] 列表: {my_list}")
+    print(f"[子进程] 已放入数据")
 
 
 def ipc_model_switch(ipc_model):

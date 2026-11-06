@@ -27,14 +27,14 @@ def get_ip():
     url = "https://www.89ip.cn/"
 
     # 保存页面源码，避免反复请求
-    # response = requests.get(url, headers=headers, cookies=cookies)
-    # html = response.content.decode()
-    # with open("89ip.html", "w", encoding="utf-8") as f:
-    #     f.write(html)
+    response = requests.get(url, headers=headers, cookies=cookies)
+    html = response.content.decode()
+    with open("./89ip.html", "w", encoding="utf-8") as f:
+        f.write(html)
 
     # # 使用你本地保存的HTML文件进行解析
-    with open("89ip.html", "r", encoding="utf-8") as f:
-        html = f.read()
+    # with open("89ip.html", "r", encoding="utf-8") as f:
+    #     html = f.read()
     tree = etree.HTML(html)
 
     ip_port_list = tree.xpath('//table[@class="layui-table"]/tbody/tr/td[1]/text()|//table[@class="layui-table"]/tbody/tr/td[2]/text()')

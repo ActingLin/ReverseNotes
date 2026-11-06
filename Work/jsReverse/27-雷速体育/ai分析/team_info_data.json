@@ -377,14 +377,14 @@
     "position": "中超 13",
     "position_rank": "13",
     "position_rank_desc": "中超排名>",
-    "fifa": "912",
+    "fifa": "934",
     "fifa_desc": "俱乐部排名",
     "team_intro": "河南俱乐部彩陶坊足球俱乐部（英文名：Henan FC，粤语名：河南俱樂部彩陶坊）， 是中超联赛的一支足球俱乐部，当前河南俱乐部彩陶坊的市值为：740.0万欧元，河南俱乐部彩陶坊成立时间是1994年，河南俱乐部彩陶坊主场球场为郑州航海体育场，郑州航海体育场场馆可容纳观众数量为29860人，我们将为你实时更新河南俱乐部彩陶坊赛事数据信息。",
-    "subscribe_num": 34300,
+    "subscribe_num": 34888,
     "avg_age": "27.0",
-    "record": "8/5/9",
-    "recent_match_time": 1787482800,
-    "recent_result": "DWDDL"
+    "record": "8/6/9",
+    "recent_match_time": 1788004800,
+    "recent_result": "WDDLD"
   },
   "transfers": {
     "transfer_from": [
@@ -3692,7 +3692,7 @@
         "to_team": {
           "id": 10223
         },
-        "transfer_time": 1483138800,
+        "transfer_time": 1483113600,
         "transfer_fee": 0,
         "transfer_fee_desc": "",
         "transfer_desc": "",
@@ -5756,24 +5756,6 @@
       },
       {
         "player": {
-          "id": 1106045
-        },
-        "from_team": {
-          "id": 10700
-        },
-        "to_team": {
-          "id": 10766
-        },
-        "transfer_time": 1767110400,
-        "transfer_fee": 0,
-        "transfer_fee_desc": "",
-        "transfer_desc": "",
-        "transfer_type": 2,
-        "transfer_type_desc": "租借结束",
-        "free_agent": 0
-      },
-      {
-        "player": {
           "id": 1406597
         },
         "from_team": {
@@ -5886,6 +5868,24 @@
         },
         "from_team": {
           "id": 14347
+        },
+        "to_team": {
+          "id": 10766
+        },
+        "transfer_time": 1767110400,
+        "transfer_fee": 0,
+        "transfer_fee_desc": "",
+        "transfer_desc": "",
+        "transfer_type": 2,
+        "transfer_type_desc": "租借结束",
+        "free_agent": 0
+      },
+      {
+        "player": {
+          "id": 1106045
+        },
+        "from_team": {
+          "id": 10700
         },
         "to_team": {
           "id": 10766
@@ -6638,10 +6638,10 @@
       },
       {
         "player": {
-          "id": 1106045
+          "id": 1282517
         },
         "from_team": {
-          "id": 10186
+          "id": 28893
         },
         "to_team": {
           "id": 10766
@@ -6656,10 +6656,10 @@
       },
       {
         "player": {
-          "id": 1282517
+          "id": 1106045
         },
         "from_team": {
-          "id": 28893
+          "id": 10186
         },
         "to_team": {
           "id": 10766
@@ -9004,7 +9004,7 @@
         "to_team": {
           "id": 10766
         },
-        "transfer_time": 1452294000,
+        "transfer_time": 1452268800,
         "transfer_fee": 0,
         "transfer_fee_desc": "",
         "transfer_desc": "",
@@ -10725,7 +10725,7 @@
         "name": "康嘉玮",
         "logo": "https://cdn.leisu.com/football/avatar/505a5e64c8fb6e756a3559c954049a25.png",
         "position_name": "后卫",
-        "age": 21,
+        "age": 22,
         "birthday": 1092614400,
         "nationality": "中国",
         "suffix": ""
@@ -11101,7 +11101,7 @@
         "birthday": 677203200,
         "nationality": "塞尔维亚",
         "suffix": "",
-        "market": "20万欧"
+        "market": "15万欧"
       },
       {
         "id": 1154104,
@@ -12614,7 +12614,7 @@
         "name": "张璐",
         "logo": "https://cdn.leisu.com/football/avatar/38994ae7d30303b8d23ec3538dd055b7.png",
         "position_name": "后卫",
-        "age": 38,
+        "age": 39,
         "birthday": 556675200,
         "nationality": "中国",
         "suffix": ""
@@ -13226,11 +13226,6 @@
         "logo": "https://cdn.leisu.com/football/teamflag_s/3f0164c40c878bc710d0e7f83c6f5d71.png"
       },
       {
-        "id": 10700,
-        "name": "长春亚泰",
-        "logo": "https://cdn.leisu.com/football/teamflag_s/2025/08/13/FsQcMe2UwJmTddosXmeryTIp5zFE.png"
-      },
-      {
         "id": 10365,
         "name": "格罗兹尼艾哈迈德",
         "logo": "https://cdn.leisu.com/football/teamflag_s/553ebe5306456914b5574aa8ef0eaf0f.png"
@@ -13254,6 +13249,11 @@
         "id": 48126,
         "name": "广西平果(已退出)",
         "logo": "https://cdn.leisu.com/football/teamflag_s/8c7b1c67391e4ab7bb2d9743850f13aa.png"
+      },
+      {
+        "id": 10700,
+        "name": "长春亚泰",
+        "logo": "https://cdn.leisu.com/football/teamflag_s/2025/08/13/FsQcMe2UwJmTddosXmeryTIp5zFE.png"
       },
       {
         "id": -17527,
@@ -13888,7 +13888,7 @@
       {
         "id": 57108,
         "name": "布尔加斯1919",
-        "logo": "https://cdn.leisu.com/football/teamflag_s/7f6965db64018537a74ad2feed82f289.png"
+        "logo": "https://cdn.leisu.com/football/teamflag_s/eee07e98c33dbee589b014d04141ee48.png"
       },
       {
         "id": -26980,
@@ -14107,7 +14107,7 @@
             "nationality": "巴西",
             "market_value": "150万",
             "player_value": 1500000,
-            "court": 7,
+            "court": 8,
             "goals": 0,
             "assists": 2,
             "red_cards": 0,
@@ -14115,9 +14115,9 @@
             "saves": 0,
             "runs_out": 0,
             "runs_out_succ": 0,
-            "tackles": 7,
+            "tackles": 9,
             "blocked_shots": 2,
-            "clearances": 5,
+            "clearances": 7,
             "clean_sheets": 0,
             "goal_conceded": 0
           },
@@ -14144,17 +14144,17 @@
             "nationality": "巴西",
             "market_value": "65万",
             "player_value": 650000,
-            "court": 22,
-            "goals": 8,
+            "court": 23,
+            "goals": 11,
             "assists": 4,
             "red_cards": 0,
             "yellow_cards": 2,
             "saves": 0,
             "runs_out": 0,
             "runs_out_succ": 0,
-            "tackles": 17,
+            "tackles": 18,
             "blocked_shots": 8,
-            "clearances": 25,
+            "clearances": 26,
             "clean_sheets": 0,
             "goal_conceded": 0
           },
@@ -14181,7 +14181,7 @@
             "nationality": "中国",
             "market_value": "20万",
             "player_value": 200000,
-            "court": 23,
+            "court": 24,
             "goals": 5,
             "assists": 3,
             "red_cards": 0,
@@ -14189,9 +14189,9 @@
             "saves": 0,
             "runs_out": 0,
             "runs_out_succ": 0,
-            "tackles": 42,
+            "tackles": 45,
             "blocked_shots": 7,
-            "clearances": 24,
+            "clearances": 26,
             "clean_sheets": 0,
             "goal_conceded": 0
           },
@@ -14329,7 +14329,7 @@
             "nationality": "中国",
             "market_value": "5万",
             "player_value": 50000,
-            "court": 10,
+            "court": 11,
             "goals": 0,
             "assists": 0,
             "red_cards": 0,
@@ -14408,9 +14408,9 @@
             "nationality": "巴西",
             "market_value": "120万",
             "player_value": 1200000,
-            "court": 20,
+            "court": 21,
             "goals": 8,
-            "assists": 4,
+            "assists": 6,
             "red_cards": 0,
             "yellow_cards": 2,
             "saves": 0,
@@ -14445,7 +14445,7 @@
             "nationality": "中国",
             "market_value": "27.5万",
             "player_value": 275000,
-            "court": 22,
+            "court": 23,
             "goals": 0,
             "assists": 1,
             "red_cards": 0,
@@ -14453,9 +14453,9 @@
             "saves": 0,
             "runs_out": 0,
             "runs_out_succ": 0,
-            "tackles": 36,
+            "tackles": 37,
             "blocked_shots": 2,
-            "clearances": 52,
+            "clearances": 55,
             "clean_sheets": 0,
             "goal_conceded": 0
           },
@@ -14519,9 +14519,9 @@
             "nationality": "中国",
             "market_value": "15万",
             "player_value": 150000,
-            "court": 23,
+            "court": 24,
             "goals": 1,
-            "assists": 4,
+            "assists": 5,
             "red_cards": 0,
             "yellow_cards": 5,
             "saves": 0,
@@ -14593,17 +14593,17 @@
             "nationality": "中国",
             "market_value": "10万",
             "player_value": 100000,
-            "court": 22,
+            "court": 23,
             "goals": 0,
             "assists": 0,
             "red_cards": 0,
-            "yellow_cards": 5,
+            "yellow_cards": 6,
             "saves": 0,
             "runs_out": 0,
             "runs_out_succ": 0,
-            "tackles": 24,
+            "tackles": 25,
             "blocked_shots": 3,
-            "clearances": 24,
+            "clearances": 25,
             "clean_sheets": 0,
             "goal_conceded": 0
           },
@@ -14667,7 +14667,7 @@
             "nationality": "中国",
             "market_value": "2.5万",
             "player_value": 25000,
-            "court": 8,
+            "court": 9,
             "goals": 0,
             "assists": 0,
             "red_cards": 0,
@@ -14746,17 +14746,17 @@
             "nationality": "巴西",
             "market_value": "100万",
             "player_value": 1000000,
-            "court": 22,
+            "court": 23,
             "goals": 2,
             "assists": 0,
             "red_cards": 0,
-            "yellow_cards": 1,
+            "yellow_cards": 2,
             "saves": 0,
             "runs_out": 0,
             "runs_out_succ": 0,
-            "tackles": 15,
+            "tackles": 18,
             "blocked_shots": 7,
-            "clearances": 118,
+            "clearances": 126,
             "clean_sheets": 0,
             "goal_conceded": 0
           },
@@ -14783,17 +14783,17 @@
             "nationality": "巴西",
             "market_value": "50万",
             "player_value": 500000,
-            "court": 23,
-            "goals": 2,
+            "court": 24,
+            "goals": 3,
             "assists": 0,
             "red_cards": 0,
             "yellow_cards": 2,
             "saves": 0,
             "runs_out": 0,
             "runs_out_succ": 0,
-            "tackles": 28,
+            "tackles": 32,
             "blocked_shots": 4,
-            "clearances": 143,
+            "clearances": 151,
             "clean_sheets": 0,
             "goal_conceded": 0
           },
@@ -14820,17 +14820,17 @@
             "nationality": "中国",
             "market_value": "35万",
             "player_value": 350000,
-            "court": 19,
+            "court": 20,
             "goals": 0,
-            "assists": 0,
+            "assists": 1,
             "red_cards": 0,
             "yellow_cards": 1,
             "saves": 0,
             "runs_out": 0,
             "runs_out_succ": 0,
-            "tackles": 28,
+            "tackles": 31,
             "blocked_shots": 2,
-            "clearances": 43,
+            "clearances": 47,
             "clean_sheets": 0,
             "goal_conceded": 0
           },
@@ -14865,7 +14865,7 @@
             "saves": 0,
             "runs_out": 0,
             "runs_out_succ": 0,
-            "tackles": 6,
+            "tackles": 5,
             "blocked_shots": 0,
             "clearances": 24,
             "clean_sheets": 0,
@@ -14894,17 +14894,17 @@
             "nationality": "中国香港",
             "market_value": "20万",
             "player_value": 200000,
-            "court": 14,
+            "court": 15,
             "goals": 0,
             "assists": 0,
             "red_cards": 0,
-            "yellow_cards": 1,
+            "yellow_cards": 2,
             "saves": 0,
             "runs_out": 0,
             "runs_out_succ": 0,
             "tackles": 7,
             "blocked_shots": 1,
-            "clearances": 30,
+            "clearances": 34,
             "clean_sheets": 0,
             "goal_conceded": 0
           },
@@ -14968,7 +14968,7 @@
             "nationality": "中国",
             "market_value": "5万",
             "player_value": 50000,
-            "court": 3,
+            "court": 4,
             "goals": 1,
             "assists": 0,
             "red_cards": 0,
@@ -14978,7 +14978,7 @@
             "runs_out_succ": 0,
             "tackles": 0,
             "blocked_shots": 0,
-            "clearances": 0,
+            "clearances": 1,
             "clean_sheets": 0,
             "goal_conceded": 0
           },
@@ -15121,19 +15121,19 @@
             "nationality": "中国",
             "market_value": "5万",
             "player_value": 50000,
-            "court": 21,
+            "court": 22,
             "goals": 0,
             "assists": 0,
             "red_cards": 0,
             "yellow_cards": 1,
-            "saves": 57,
+            "saves": 58,
             "runs_out": 5,
             "runs_out_succ": 4,
             "tackles": 0,
             "blocked_shots": 0,
-            "clearances": 19,
+            "clearances": 20,
             "clean_sheets": 3,
-            "goal_conceded": 29
+            "goal_conceded": 33
           },
           "position": "G",
           "shirt_number": "18"
@@ -15260,18 +15260,18 @@
       "players": [
         {
           "player_id": 1574819,
-          "court": 13,
+          "court": 14,
           "goals": 0,
           "assists": 0,
           "red_cards": 0,
-          "yellow_cards": 1,
+          "yellow_cards": 2,
           "saves": 0,
           "runs_out": 0,
           "runs_out_succ": 0,
-          "minutes_played": 408,
+          "minutes_played": 453,
           "tackles": 7,
           "blocked_shots": 1,
-          "clearances": 30,
+          "clearances": 34,
           "clean_sheets": 0,
           "goal_conceded": 0
         },
@@ -15286,7 +15286,7 @@
           "runs_out": 0,
           "runs_out_succ": 0,
           "minutes_played": 508,
-          "tackles": 6,
+          "tackles": 5,
           "blocked_shots": 0,
           "clearances": 24,
           "clean_sheets": 0,
@@ -15294,7 +15294,7 @@
         },
         {
           "player_id": 1406597,
-          "court": 2,
+          "court": 3,
           "goals": 0,
           "assists": 0,
           "red_cards": 0,
@@ -15302,10 +15302,10 @@
           "saves": 0,
           "runs_out": 0,
           "runs_out_succ": 0,
-          "minutes_played": 2,
+          "minutes_played": 6,
           "tackles": 0,
           "blocked_shots": 0,
-          "clearances": 0,
+          "clearances": 1,
           "clean_sheets": 0,
           "goal_conceded": 0
         },
@@ -15396,7 +15396,7 @@
         },
         {
           "player_id": 1160975,
-          "court": 20,
+          "court": 21,
           "goals": 0,
           "assists": 1,
           "red_cards": 0,
@@ -15404,41 +15404,41 @@
           "saves": 0,
           "runs_out": 0,
           "runs_out_succ": 0,
-          "minutes_played": 1662,
-          "tackles": 36,
+          "minutes_played": 1752,
+          "tackles": 37,
           "blocked_shots": 2,
-          "clearances": 52,
+          "clearances": 55,
           "clean_sheets": 0,
           "goal_conceded": 0
         },
         {
           "player_id": 1157132,
-          "court": 17,
+          "court": 18,
           "goals": 0,
-          "assists": 0,
+          "assists": 1,
           "red_cards": 0,
           "yellow_cards": 0,
           "saves": 0,
           "runs_out": 0,
           "runs_out_succ": 0,
-          "minutes_played": 1401,
-          "tackles": 28,
+          "minutes_played": 1491,
+          "tackles": 31,
           "blocked_shots": 2,
-          "clearances": 43,
+          "clearances": 47,
           "clean_sheets": 0,
           "goal_conceded": 0
         },
         {
           "player_id": 99663,
-          "court": 19,
+          "court": 20,
           "goals": 8,
-          "assists": 3,
+          "assists": 5,
           "red_cards": 0,
           "yellow_cards": 2,
           "saves": 0,
           "runs_out": 0,
           "runs_out_succ": 0,
-          "minutes_played": 1652,
+          "minutes_played": 1742,
           "tackles": 23,
           "blocked_shots": 12,
           "clearances": 13,
@@ -15447,24 +15447,24 @@
         },
         {
           "player_id": 84868,
-          "court": 22,
-          "goals": 2,
+          "court": 23,
+          "goals": 3,
           "assists": 0,
           "red_cards": 0,
           "yellow_cards": 1,
           "saves": 0,
           "runs_out": 0,
           "runs_out_succ": 0,
-          "minutes_played": 1908,
-          "tackles": 28,
+          "minutes_played": 1998,
+          "tackles": 32,
           "blocked_shots": 4,
-          "clearances": 143,
+          "clearances": 151,
           "clean_sheets": 0,
           "goal_conceded": 0
         },
         {
           "player_id": 79847,
-          "court": 21,
+          "court": 22,
           "goals": 3,
           "assists": 3,
           "red_cards": 0,
@@ -15472,10 +15472,10 @@
           "saves": 0,
           "runs_out": 0,
           "runs_out_succ": 0,
-          "minutes_played": 1715,
-          "tackles": 42,
+          "minutes_played": 1811,
+          "tackles": 45,
           "blocked_shots": 7,
-          "clearances": 24,
+          "clearances": 26,
           "clean_sheets": 0,
           "goal_conceded": 0
         },
@@ -15498,37 +15498,37 @@
         },
         {
           "player_id": 62734,
-          "court": 20,
+          "court": 21,
           "goals": 0,
           "assists": 0,
           "red_cards": 0,
-          "yellow_cards": 5,
+          "yellow_cards": 6,
           "saves": 0,
           "runs_out": 0,
           "runs_out_succ": 0,
-          "minutes_played": 1433,
-          "tackles": 24,
+          "minutes_played": 1519,
+          "tackles": 25,
           "blocked_shots": 3,
-          "clearances": 24,
+          "clearances": 25,
           "clean_sheets": 0,
           "goal_conceded": 0
         },
         {
           "player_id": 62680,
-          "court": 21,
+          "court": 22,
           "goals": 0,
           "assists": 0,
           "red_cards": 0,
           "yellow_cards": 1,
-          "saves": 57,
+          "saves": 58,
           "runs_out": 5,
           "runs_out_succ": 4,
-          "minutes_played": 1890,
+          "minutes_played": 1980,
           "tackles": 0,
           "blocked_shots": 0,
-          "clearances": 19,
+          "clearances": 20,
           "clean_sheets": 3,
-          "goal_conceded": 29
+          "goal_conceded": 33
         },
         {
           "player_id": 62635,
@@ -15549,49 +15549,49 @@
         },
         {
           "player_id": 57255,
-          "court": 21,
+          "court": 22,
           "goals": 2,
           "assists": 0,
           "red_cards": 0,
-          "yellow_cards": 1,
+          "yellow_cards": 2,
           "saves": 0,
           "runs_out": 0,
           "runs_out_succ": 0,
-          "minutes_played": 1890,
-          "tackles": 15,
+          "minutes_played": 1980,
+          "tackles": 18,
           "blocked_shots": 7,
-          "clearances": 118,
+          "clearances": 126,
           "clean_sheets": 0,
           "goal_conceded": 0
         },
         {
           "player_id": 54757,
-          "court": 21,
-          "goals": 8,
+          "court": 22,
+          "goals": 11,
           "assists": 4,
           "red_cards": 0,
           "yellow_cards": 2,
           "saves": 0,
           "runs_out": 0,
           "runs_out_succ": 0,
-          "minutes_played": 1765,
-          "tackles": 17,
+          "minutes_played": 1855,
+          "tackles": 18,
           "blocked_shots": 8,
-          "clearances": 25,
+          "clearances": 26,
           "clean_sheets": 0,
           "goal_conceded": 0
         },
         {
           "player_id": 50088,
-          "court": 21,
+          "court": 22,
           "goals": 1,
-          "assists": 3,
+          "assists": 4,
           "red_cards": 0,
           "yellow_cards": 5,
           "saves": 0,
           "runs_out": 0,
           "runs_out_succ": 0,
-          "minutes_played": 1872,
+          "minutes_played": 1917,
           "tackles": 25,
           "blocked_shots": 0,
           "clearances": 15,
@@ -15600,7 +15600,7 @@
         },
         {
           "player_id": 1901577,
-          "court": 7,
+          "court": 8,
           "goals": 0,
           "assists": 0,
           "red_cards": 0,
@@ -15608,7 +15608,7 @@
           "saves": 0,
           "runs_out": 0,
           "runs_out_succ": 0,
-          "minutes_played": 184,
+          "minutes_played": 185,
           "tackles": 1,
           "blocked_shots": 0,
           "clearances": 0,
@@ -15634,7 +15634,7 @@
         },
         {
           "player_id": 70940,
-          "court": 8,
+          "court": 9,
           "goals": 0,
           "assists": 0,
           "red_cards": 0,
@@ -15642,7 +15642,7 @@
           "saves": 0,
           "runs_out": 0,
           "runs_out_succ": 0,
-          "minutes_played": 169,
+          "minutes_played": 170,
           "tackles": 4,
           "blocked_shots": 0,
           "clearances": 2,
@@ -15685,7 +15685,7 @@
         },
         {
           "player_id": 1190157,
-          "court": 6,
+          "court": 7,
           "goals": 0,
           "assists": 2,
           "red_cards": 0,
@@ -15693,10 +15693,10 @@
           "saves": 0,
           "runs_out": 0,
           "runs_out_succ": 0,
-          "minutes_played": 477,
-          "tackles": 7,
+          "minutes_played": 573,
+          "tackles": 9,
           "blocked_shots": 2,
-          "clearances": 5,
+          "clearances": 7,
           "clean_sheets": 0,
           "goal_conceded": 0
         }
@@ -17862,13 +17862,13 @@
       "joined": 1745856000,
       "contract_until": 0,
       "players_used": 40,
-      "matches": 51,
+      "matches": 52,
       "win": 21,
-      "draw": 11,
+      "draw": 12,
       "lose": 19,
-      "goal_ppt": "1.90:1.78",
-      "ppm": "1.45",
-      "win_rate": "41.18%"
+      "goal_ppt": "1.94:1.83",
+      "ppm": "1.44",
+      "win_rate": "40.38%"
     },
     {
       "manager_id": 8727,
@@ -17885,22 +17885,6 @@
       "goal_ppt": "1.15:1.32",
       "ppm": "1.20",
       "win_rate": "31.71%"
-    },
-    {
-      "manager_id": 93438,
-      "manager_name": "萨尔科",
-      "manager_logo": "https://cdn.leisu.com/image/default_manager.png",
-      "position": 1,
-      "joined": 1678032000,
-      "contract_until": 1704470400,
-      "players_used": 32,
-      "matches": 32,
-      "win": 10,
-      "draw": 9,
-      "lose": 13,
-      "goal_ppt": "1.34:1.44",
-      "ppm": "1.22",
-      "win_rate": "31.25%"
     },
     {
       "manager_id": 10257,
@@ -18303,8 +18287,8 @@
       "win_rate": "0%"
     },
     {
-      "manager_id": 38436,
-      "manager_name": "赫尔斯蒂奇",
+      "manager_id": 21851,
+      "manager_name": "尼科利奇",
       "manager_logo": "https://cdn.leisu.com/image/default_manager.png",
       "position": 1,
       "joined": 0,
@@ -18319,8 +18303,8 @@
       "win_rate": "0%"
     },
     {
-      "manager_id": 21851,
-      "manager_name": "尼科利奇",
+      "manager_id": 38436,
+      "manager_name": "赫尔斯蒂奇",
       "manager_logo": "https://cdn.leisu.com/image/default_manager.png",
       "position": 1,
       "joined": 0,
@@ -18539,7 +18523,7 @@
             "logo": "https://cdn.leisu.com/football/avatar/dbe7b8f35d8d9dab3b30743d65220c34.png",
             "position": 1,
             "start_date": "2025/04/29",
-            "end_date": "2026/08/15"
+            "end_date": "2026/08/25"
           },
           {
             "id": 8727,
@@ -19261,14 +19245,6 @@
             "end_date": "2025/04/29"
           },
           {
-            "id": 93438,
-            "name": "萨尔科",
-            "logo": "",
-            "position": 1,
-            "start_date": "2023/03/06",
-            "end_date": "2024/01/06"
-          },
-          {
             "id": 10257,
             "name": "萨尔科",
             "logo": "https://cdn.leisu.com/football/avatar/3a536c8f0d1a1fea525592b1108730f1.png",
@@ -19979,14 +19955,6 @@
           }
         ],
         "managers": [
-          {
-            "id": 93438,
-            "name": "萨尔科",
-            "logo": "",
-            "position": 1,
-            "start_date": "2023/03/06",
-            "end_date": "2024/01/06"
-          },
           {
             "id": 10257,
             "name": "萨尔科",
@@ -21405,6 +21373,38 @@
                 "goal_conceded": 0
               },
               {
+                "player_id": 62638,
+                "court": 5,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 1,
+                "goal_conceded": 8
+              },
+              {
+                "player_id": 1250553,
+                "court": 0,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 60160,
+                "court": 0,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 1434831,
+                "court": 0,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
                 "player_id": 1125473,
                 "court": 20,
                 "goals": 0,
@@ -21557,14 +21557,6 @@
                 "goal_conceded": 0
               },
               {
-                "player_id": 62638,
-                "court": 5,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 1,
-                "goal_conceded": 8
-              },
-              {
                 "player_id": 62655,
                 "court": 9,
                 "goals": 0,
@@ -21575,22 +21567,6 @@
               {
                 "player_id": 1406597,
                 "court": 4,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 1250553,
-                "court": 0,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 60160,
-                "court": 0,
                 "goals": 0,
                 "assists": 0,
                 "clean_sheets": 0,
@@ -21624,14 +21600,6 @@
                 "player_id": 49380,
                 "court": 4,
                 "goals": 1,
-                "assists": 0,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 1434831,
-                "court": 0,
-                "goals": 0,
                 "assists": 0,
                 "clean_sheets": 0,
                 "goal_conceded": 0
@@ -22131,6 +22099,30 @@
             "name": "中超",
             "players": [
               {
+                "player_id": 62638,
+                "court": 17,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 3,
+                "goal_conceded": 31
+              },
+              {
+                "player_id": 1250555,
+                "court": 0,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 1250553,
+                "court": 1,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 1,
+                "goal_conceded": 0
+              },
+              {
                 "player_id": 49406,
                 "court": 16,
                 "goals": 8,
@@ -22169,14 +22161,6 @@
                 "assists": 1,
                 "clean_sheets": 0,
                 "goal_conceded": 0
-              },
-              {
-                "player_id": 62638,
-                "court": 17,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 3,
-                "goal_conceded": 31
               },
               {
                 "player_id": 88812,
@@ -22336,22 +22320,6 @@
                 "goals": 0,
                 "assists": 0,
                 "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 1250555,
-                "court": 0,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 1250553,
-                "court": 1,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 1,
                 "goal_conceded": 0
               },
               {
@@ -22945,6 +22913,30 @@
                 "goal_conceded": 0
               },
               {
+                "player_id": 62680,
+                "court": 1,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 1,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 81206,
+                "court": 1,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 104479,
+                "court": 0,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
                 "player_id": 91777,
                 "court": 7,
                 "goals": 0,
@@ -23137,24 +23129,8 @@
                 "goal_conceded": 0
               },
               {
-                "player_id": 62680,
-                "court": 1,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 1,
-                "goal_conceded": 0
-              },
-              {
                 "player_id": 77458,
                 "court": 10,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 81206,
-                "court": 1,
                 "goals": 0,
                 "assists": 0,
                 "clean_sheets": 0,
@@ -23173,14 +23149,6 @@
                 "court": 15,
                 "goals": 6,
                 "assists": 6,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 104479,
-                "court": 0,
-                "goals": 0,
-                "assists": 0,
                 "clean_sheets": 0,
                 "goal_conceded": 0
               }
@@ -23552,6 +23520,46 @@
             "name": "中超",
             "players": [
               {
+                "player_id": 912837,
+                "court": 4,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 76646,
+                "court": 1,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 104479,
+                "court": 0,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 96642,
+                "court": 1,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 62640,
+                "court": 0,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
                 "player_id": 71113,
                 "court": 27,
                 "goals": 6,
@@ -23656,14 +23664,6 @@
                 "goal_conceded": 0
               },
               {
-                "player_id": 912837,
-                "court": 4,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
                 "player_id": 49380,
                 "court": 18,
                 "goals": 1,
@@ -23760,43 +23760,11 @@
                 "goal_conceded": 0
               },
               {
-                "player_id": 76646,
-                "court": 1,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
                 "player_id": 62680,
                 "court": 1,
                 "goals": 0,
                 "assists": 0,
                 "clean_sheets": 1,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 104479,
-                "court": 0,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 96642,
-                "court": 1,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 62640,
-                "court": 0,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 0,
                 "goal_conceded": 0
               }
             ]
@@ -24168,6 +24136,62 @@
             "name": "中超",
             "players": [
               {
+                "player_id": 54040,
+                "court": 17,
+                "goals": 0,
+                "assists": 1,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 81206,
+                "court": 2,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 94312,
+                "court": 2,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 91913,
+                "court": 8,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 62680,
+                "court": 0,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 62640,
+                "court": 0,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 1125419,
+                "court": 6,
+                "goals": 1,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
                 "player_id": 71113,
                 "court": 24,
                 "goals": 10,
@@ -24264,14 +24288,6 @@
                 "goal_conceded": 0
               },
               {
-                "player_id": 54040,
-                "court": 17,
-                "goals": 0,
-                "assists": 1,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
                 "player_id": 62655,
                 "court": 7,
                 "goals": 0,
@@ -24344,57 +24360,9 @@
                 "goal_conceded": 0
               },
               {
-                "player_id": 81206,
-                "court": 2,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
                 "player_id": 10299,
                 "court": 5,
                 "goals": 5,
-                "assists": 0,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 94312,
-                "court": 2,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 91913,
-                "court": 8,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 62680,
-                "court": 0,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 62640,
-                "court": 0,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 1125419,
-                "court": 6,
-                "goals": 1,
                 "assists": 0,
                 "clean_sheets": 0,
                 "goal_conceded": 0
@@ -25444,6 +25412,102 @@
                 "goal_conceded": 0
               },
               {
+                "player_id": 62638,
+                "court": 13,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 2,
+                "goal_conceded": 17
+              },
+              {
+                "player_id": 35826,
+                "court": 23,
+                "goals": 4,
+                "assists": 3,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 45723,
+                "court": 29,
+                "goals": 0,
+                "assists": 1,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 77503,
+                "court": 21,
+                "goals": 2,
+                "assists": 1,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 62640,
+                "court": 8,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 70965,
+                "court": 0,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 70963,
+                "court": 0,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 993263,
+                "court": 0,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 977556,
+                "court": 7,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 100417,
+                "court": 0,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 957589,
+                "court": 4,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 1108557,
+                "court": 2,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
                 "player_id": 39339,
                 "court": 27,
                 "goals": 0,
@@ -25460,14 +25524,6 @@
                 "goal_conceded": 0
               },
               {
-                "player_id": 62638,
-                "court": 13,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 2,
-                "goal_conceded": 17
-              },
-              {
                 "player_id": 63163,
                 "court": 13,
                 "goals": 0,
@@ -25480,14 +25536,6 @@
                 "court": 29,
                 "goals": 7,
                 "assists": 13,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 35826,
-                "court": 23,
-                "goals": 4,
-                "assists": 3,
                 "clean_sheets": 0,
                 "goal_conceded": 0
               },
@@ -25548,14 +25596,6 @@
                 "goal_conceded": 0
               },
               {
-                "player_id": 45723,
-                "court": 29,
-                "goals": 0,
-                "assists": 1,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
                 "player_id": 104109,
                 "court": 13,
                 "goals": 1,
@@ -25596,80 +25636,8 @@
                 "goal_conceded": 0
               },
               {
-                "player_id": 77503,
-                "court": 21,
-                "goals": 2,
-                "assists": 1,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 62640,
-                "court": 8,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
                 "player_id": 62637,
                 "court": 16,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 70965,
-                "court": 0,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 70963,
-                "court": 0,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 993263,
-                "court": 0,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 977556,
-                "court": 7,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 100417,
-                "court": 0,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 957589,
-                "court": 4,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 1108557,
-                "court": 2,
                 "goals": 0,
                 "assists": 0,
                 "clean_sheets": 0,
@@ -25771,14 +25739,6 @@
               },
               {
                 "player_id": 1108557,
-                "court": 1,
-                "goals": 0,
-                "assists": 0,
-                "clean_sheets": 0,
-                "goal_conceded": 0
-              },
-              {
-                "player_id": 70963,
                 "court": 1,
                 "goals": 0,
                 "assists": 0,
@@ -25924,6 +25884,14 @@
               {
                 "player_id": 70986,
                 "court": 0,
+                "goals": 0,
+                "assists": 0,
+                "clean_sheets": 0,
+                "goal_conceded": 0
+              },
+              {
+                "player_id": 70963,
+                "court": 1,
                 "goals": 0,
                 "assists": 0,
                 "clean_sheets": 0,
